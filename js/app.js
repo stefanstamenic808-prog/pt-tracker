@@ -439,6 +439,21 @@ function renderCards(list){
     var cgs=groups.filter(function(g){return g.members&&g.members.indexOf(c.id)>-1;});
 
     var cls='cc'+(chk?' trained':'')+(isDone?' completed':warn?' expiring':'');
+
+    // Boja progress bara: zelena → narandžasta → crvena prema iskoristećenosti / blizini isteka
+    var barColor='var(--green)';
+    if(p&&!isDone){
+      var dayDanger=0;
+      if(dl!==null&&dl!==undefined){
+        if(dl<=3)dayDanger=95;
+        else if(dl<=7)dayDanger=80;
+        else if(dl<=14)dayDanger=55;
+        else dayDanger=25;
+      }
+      var danger=Math.max(pct,dayDanger);
+      barColor=danger>=85?'var(--red)':danger>=60?'#ff9500':'var(--green)';
+    }
+
     return '<div class="'+cls+'">'+
       '<div class="ctop">'+
         '<div class="chk'+(chk?' on':'')+'" data-train="'+c.id+'">'+
@@ -463,7 +478,7 @@ function renderCards(list){
           (p?'<span class="ptag'+(isDone?' style="background:var(--gbg);color:var(--green)"':'')+'">'+used+'/'+total+'</span>':'')+
         '</div>'+
       '</div>'+
-      (p?'<div class="prow"><div class="pbar"><div class="pfill'+(isDone?' full':'')+'" style="width:'+pct+'%"></div></div><span class="plbl'+(isDone?' style="color:var(--green);font-weight:600"':'')+'">'+pct+'%</span></div>':'')+
+      (p?'<div class="prow"><div class="pbar"><div class="pfill" style="width:'+pct+'%;background:'+barColor+'"></div></div><span class="plbl" style="color:'+barColor+';font-weight:600">'+pct+'%</span></div>':'')+
     '</div>';
   }).join('');
 }
