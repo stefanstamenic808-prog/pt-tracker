@@ -88,7 +88,7 @@ var TR={
     rufSaved:'Ruffier test sačuvan! ❤️',rufDeleted:'Ruffier test obrisan.',rufEnter:'Unesi sva tri pulsa!',
     rufBpm:'otk/min',rufProgress:'Progres indeksa',
     ttIso:'Izometrija',ttFMS:'FMS',ttRuf:'Ruffier',tt1RM:'1RM',
-    rmTest:'1RM Testiranje',rmDesc:'Procenjeni One Rep Max — Brzycki formula. Unesi težinu i broj ponavljanja (2-10 rep).',
+    rmTest:'1RM Testiranje',rmDesc:'Procenjeni One Rep Max — prosek 3 formule (Brzycki + Epley + Lombardi). Unesi težinu i broj ponavljanja (2-10 rep).',
     rmBench:'Bench Press',rmSquat:'Čučanj',rmDeadlift:'Mrtvo dizanje',rmOHP:'Vojnički potisak',rmRow:'Veslanje šipkom',
     rmBenchM:'grudi, triceps',rmSquatM:'kvadriceps, gluteus',rmDeadliftM:'zadnji lanac',rmOHPM:'ramena, triceps',rmRowM:'leđa, biceps',
     rmWeight:'Težina (kg)',rmReps:'Ponavljanja',rmEstimated:'Procena 1RM',
@@ -192,7 +192,7 @@ TR.en={
   rufSaved:'Ruffier test saved! ❤️',rufDeleted:'Ruffier test deleted.',rufEnter:'Enter all three pulse values!',
   rufBpm:'bpm',rufProgress:'Index progress',
   ttIso:'Isometric',ttFMS:'FMS',ttRuf:'Ruffier',tt1RM:'1RM',
-  rmTest:'1RM Testing',rmDesc:'Estimated One Rep Max — Brzycki formula. Enter weight and reps (2-10 rep).',
+  rmTest:'1RM Testing',rmDesc:'Estimated One Rep Max — average of 3 formulas (Brzycki + Epley + Lombardi). Enter weight and reps (2-10 rep).',
   rmBench:'Bench Press',rmSquat:'Squat',rmDeadlift:'Deadlift',rmOHP:'Overhead Press',rmRow:'Barbell Row',
   rmBenchM:'chest, triceps',rmSquatM:'quads, glutes',rmDeadliftM:'posterior chain',rmOHPM:'shoulders, triceps',rmRowM:'back, biceps',
   rmWeight:'Weight (kg)',rmReps:'Reps',rmEstimated:'Estimated 1RM',
@@ -293,7 +293,7 @@ TR.ru={
   rufSaved:'Тест Руфье сохранён! ❤️',rufDeleted:'Тест Руфье удалён.',rufEnter:'Введите все три значения пульса!',
   rufBpm:'уд/мин',rufProgress:'Прогресс индекса',
   ttIso:'Изометрия',ttFMS:'FMS',ttRuf:'Руфье',tt1RM:'1ПМ',
-  rmTest:'Тест 1ПМ',rmDesc:'Оценка одноповторного максимума — формула Бржицки. Вес и повторения (2-10).',
+  rmTest:'Тест 1ПМ',rmDesc:'Оценка одноповторного максимума — среднее 3 формул (Brzycki + Epley + Lombardi). Вес и повторения (2-10).',
   rmBench:'Жим лёжа',rmSquat:'Присед',rmDeadlift:'Становая тяга',rmOHP:'Жим стоя',rmRow:'Тяга штанги',
   rmBenchM:'грудь, трицепс',rmSquatM:'квадрицепс, ягодицы',rmDeadliftM:'задняя цепь',rmOHPM:'плечи, трицепс',rmRowM:'спина, бицепс',
   rmWeight:'Вес (кг)',rmReps:'Повторения',rmEstimated:'Оценка 1ПМ',
@@ -1739,12 +1739,15 @@ var RM_EXERCISES=[
 
 function get1RMTests(cid){var c=cob(cid);return(c&&c.rmTests)?c.rmTests:[];}
 
-// Brzycki formula
+// 1RM = prosek 3 formule (Brzycki + Epley + Lombardi)
 function brzycki(w,r){
   if(r<=0||w<=0)return 0;
   if(r===1)return w;
   if(r>10)r=10;
-  return Math.round(w*(36/(37-r))*10)/10;
+  var b=w*(36/(37-r));            // Brzycki
+  var e=w*(1+r/30);                // Epley
+  var l=w*Math.pow(r,0.10);        // Lombardi
+  return Math.round(((b+e+l)/3)*10)/10;
 }
 
 // BW ratio categories for each exercise
