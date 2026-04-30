@@ -81,10 +81,12 @@
         <div class="tyopt" id="tyg" onclick="selTy('g')"><div style="font-size:20px;margin-bottom:4px">🏃</div><div style="font-size:11px;font-weight:600;color:var(--text)">Grupni</div><div style="font-size:10px;color:var(--text3)">5+ osoba</div></div>
       </div>
     </div>
-    <div class="field"><label>Broj treninga</label><input type="number" id="pses" placeholder="npr. 12" inputmode="numeric"/></div>
+    <div class="field2">
+      <div class="field"><label>Broj treninga</label><input type="number" id="pses" placeholder="npr. 12" inputmode="numeric"/></div>
+      <div class="field"><label>Trajanje (dana)</label><input type="number" id="pdur" placeholder="30" inputmode="numeric" value="30"/></div>
+    </div>
     <div class="field"><label>Cena (€)</label><input type="number" id="pprc" placeholder="npr. 80" inputmode="numeric"/></div>
     <div class="field"><label>Naziv (opciono)</label><input id="pnam" placeholder="npr. Gold, Starter..."/></div>
-    <div style="font-size:12px;color:var(--text3);padding:9px 12px;background:var(--bg3);border-radius:var(--rs)">Paket traje <strong>30 dana</strong>.</div>
     <div class="mact">
       <button class="btn" onclick="cm('mPkg')">Otkaži</button>
       <button class="btn btnp" onclick="savePkg()">Sačuvaj paket</button>

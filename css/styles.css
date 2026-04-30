@@ -93,12 +93,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .fbtn{padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--bg2);font-size:12px;cursor:pointer;color:var(--text);font-family:inherit}
 .fbtn.on{font-weight:700}
 /* PAKETI */
-.pkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-bottom:14px}
-.pkc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:relative}
-.pkn{font-size:34px;font-weight:800;color:var(--red)}
-.pks{font-size:12px;color:var(--text3);margin-bottom:6px}
-.pkp{font-size:19px;font-weight:700;color:var(--text)}
-.pknm{font-size:11px;color:var(--red);font-weight:500;margin-top:3px}
+.pkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.pkc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px}
+.pkhdr{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.pkacts{display:flex;gap:4px;flex-shrink:0}
+.pkbody{display:flex;flex-direction:column;gap:2px}
+.pkn{font-size:32px;font-weight:800;color:var(--red);line-height:1.05}
+.pks{font-size:12px;color:var(--text3)}
+.pkp{font-size:19px;font-weight:700;color:var(--text);margin-top:4px}
+.pknm{font-size:11px;color:var(--red);font-weight:600;padding-top:6px;border-top:1px dashed var(--border);margin-top:auto}
 /* GRUPE */
 .grpcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
 .grphdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
