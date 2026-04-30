@@ -464,12 +464,6 @@ function renderCards(list){
         '</div>'+
       '</div>'+
       (p?'<div class="prow"><div class="pbar"><div class="pfill'+(isDone?' full':'')+'" style="width:'+pct+'%"></div></div><span class="plbl'+(isDone?' style="color:var(--green);font-weight:600"':'')+'">'+pct+'%</span></div>':'')+
-      '<div class="cact">'+
-        '<button class="btn btng btnsm" data-renew="'+c.id+'">'+t('renew')+'</button>'+
-        '<button class="btn btnsm" data-edit="'+c.id+'">'+t('edit')+'</button>'+
-        '<button class="btn btnsm btna" data-arch="'+c.id+'">'+t('archiveBtn')+'</button>'+
-        '<button class="btn btnsm btnr" data-delc="'+c.id+'">'+t('delForever')+'</button>'+
-      '</div>'+
     '</div>';
   }).join('');
 }
