@@ -1013,6 +1013,83 @@ var FMS_SCORE_COLORS={
 };
 var FMS_SCORE_KEYS=['fmsScore0','fmsScore1','fmsScore2','fmsScore3'];
 
+// Korektivne preporuke po testu i oceni (0=bol, 1=ne izvodi, 2=kompenzacija)
+var FMS_CORRECTIONS={
+  deep_squat:{
+    0:'⚠️ Duboki čučanj — BOL: prekini test i uputi klijenta specijalisti.',
+    1:'Duboki čučanj: mobilnost skočnih (dorzifleksija), kukova i torakalne kičme. Vežbe: ankle wall test, hip 90/90, foam roll T-spine.',
+    2:'Duboki čučanj: stretching kukova i lista, goblet squat sa peticom podignutom (3–5°), heel elevated squat.'
+  },
+  hurdle_step:{
+    0:'⚠️ Korak preko prepone — BOL: uputi specijalisti.',
+    1:'Korak preko prepone: stabilnost na jednoj nozi, jačanje gluteus medius. Vežbe: single leg balance, side-lying clamshell, monster walks.',
+    2:'Korak preko prepone: single leg deadlift, hip flexor stretch (kneeling), step-up sa kontrolom karlice.'
+  },
+  inline_lunge:{
+    0:'⚠️ Iskorak u liniji — BOL: uputi specijalisti.',
+    1:'Iskorak u liniji: mobilnost skočnih, hip flexor stretch, anti-rotacija core-a. Vežbe: half-kneeling Pallof press, kneeling hip flexor stretch.',
+    2:'Iskorak u liniji: statički iskorak (split squat hold), torakalna rotacija (open book), reverse lunge progresija.'
+  },
+  shoulder_mob:{
+    0:'⚠️ Mobilnost ramena — BOL: uputi specijalisti (impingement test).',
+    1:'Mobilnost ramena: torakalna mobilnost, sleeper stretch, pec minor stretch. Vežbe: foam roll T-spine, doorway pec stretch, cross-body stretch.',
+    2:'Mobilnost ramena: skapularna mobilnost (wall slides), lat stretching, band dislocates.'
+  },
+  aslr:{
+    0:'⚠️ Podizanje noge — BOL: uputi specijalisti.',
+    1:'ASLR: mobilnost hamstringsa, aktivna stabilnost karlice. Vežbe: supine hamstring stretch (band), dead bug, posterior pelvic tilt.',
+    2:'ASLR: hamstring stretching (PNF), dead bug progresija, hip flexor mobilnost (couch stretch).'
+  },
+  trunk_pushup:{
+    0:'⚠️ Stabilnost trupa — BOL: uputi specijalisti (LBP screening).',
+    1:'Stabilnost trupa: plank progresije, anti-ekstenzioni rad core-a. Vežbe: plank with knee, modified push-up, dead bug.',
+    2:'Stabilnost trupa: hollow body hold, izdržljivost trupa, full plank → push-up progresija.'
+  },
+  rotary_stab:{
+    0:'⚠️ Rotatorna stabilnost — BOL: uputi specijalisti.',
+    1:'Rotatorna stabilnost: bird dog, dead bug, anti-rotacioni rad. Vežbe: bird dog (3×8 po strani), Pallof press, side plank.',
+    2:'Rotatorna stabilnost: Pallof press progresija, dijagonalni patterns (chop/lift), kneeling cable rotation.'
+  }
+};
+
+function generateFMSAutoComment(scores,total){
+  var lines=[];
+  // Ukupna ocena
+  if(total>=18) lines.push('✅ Odličan rezultat ('+total+'/21) — održavaj postignuti nivo, dodaj funkcionalne i sportski-specifične treninge.');
+  else if(total>=15) lines.push('👍 Dobar rezultat ('+total+'/21) — fokus na pojedinačne testove ispod ocene 3.');
+  else if(total>=11) lines.push('⚠️ Prosečan rezultat ('+total+'/21) — preporuka: korektivni rad PRE povećanja intenziteta treninga.');
+  else lines.push('🔴 Korekcija neophodna ('+total+'/21) — fokus isključivo na korektivne vežbe, izbegavati visoki intenzitet.');
+
+  // Detekcija bola (ocena 0) — prioritet
+  var painTests=[];
+  FMS_DATA.forEach(function(ex){if(scores[ex.key]===0)painTests.push(ex.key);});
+  if(painTests.length>0){
+    lines.push('');
+    lines.push('🚨 PAŽNJA: bol detektovan u '+painTests.length+' test'+(painTests.length>1?'a':'u')+' — obavezna konsultacija sa lekarom/fizioterapeutom pre nastavka.');
+  }
+
+  // Specifične preporuke po testu (ocene 0,1,2)
+  var hasCorrections=false;
+  var corrections=[];
+  FMS_DATA.forEach(function(ex){
+    var v=scores[ex.key];
+    if(v===undefined||v===3)return;
+    var rec=FMS_CORRECTIONS[ex.key]&&FMS_CORRECTIONS[ex.key][v];
+    if(rec){corrections.push('• '+rec);hasCorrections=true;}
+  });
+
+  if(hasCorrections){
+    lines.push('');
+    lines.push('📋 Korektivne preporuke:');
+    lines=lines.concat(corrections);
+  } else {
+    lines.push('');
+    lines.push('🎯 Sve vežbe ocenjene maksimalnom ocenom 3 — odlična funkcionalna sposobnost!');
+  }
+
+  return lines.join('\n');
+}
+
 function getFMSTests(cid){var c=cob(cid);return(c&&c.fmsTests)?c.fmsTests:[];}
 
 function fmsCat(total){
@@ -1183,6 +1260,7 @@ function buildFMSSection(cid){
         '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><span class="fms-cat" style="background:'+cat.bg+';color:'+cat.color+'">'+t(cat.label)+'</span></div>'+
         '<div class="fms-hist-grid" style="margin-bottom:8px">'+chips+'</div>'+
         '<div style="display:flex;justify-content:center">'+miniRadar+'</div>'+
+        '<div style="margin-top:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-left:3px solid '+cat.color+';border-radius:var(--rs);font-size:11.5px;line-height:1.55;color:var(--text);white-space:pre-wrap">'+(te.autoComment||generateFMSAutoComment(te.scores,te.total))+'</div>'+
       '</div>';
     }).join('');
   } else {
@@ -1271,7 +1349,8 @@ function addFMSTest(cid){
   var date=document.getElementById('fms_date').value||today();
   var note=(document.getElementById('fms_note').value||'').trim();
 
-  clients[i].fmsTests.push({date:date,scores:scoresCopy,total:total,note:note});
+  var autoComment=generateFMSAutoComment(scoresCopy,total);
+  clients[i].fmsTests.push({date:date,scores:scoresCopy,total:total,note:note,autoComment:autoComment});
   fmsScores={};
   sv();
   openProf(cid);
