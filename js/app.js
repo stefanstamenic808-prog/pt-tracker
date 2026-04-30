@@ -96,7 +96,28 @@ var TR={
     rmSaved:'1RM test sačuvan! 🏆',rmDeleted:'1RM test obrisan.',rmEnter:'Unesi bar jednu vežbu!',
     rmProgress:'Progres 1RM',rmTotal:'Ukupan 1RM',rmBW:'Telesna težina',rmRatio:'BW Ratio',
     rmBeginner:'Početnik',rmNovice:'Srednji',rmIntermediate:'Napredan',rmAdvanced:'Iskusan',rmElite:'Elitni',
-    rmEnterBW:'Unesi težinu klijenta za BW ratio',rmKg:'kg'
+    rmEnterBW:'Unesi težinu klijenta za BW ratio',rmKg:'kg',
+    // ISO test UI
+    isoDesc:'Izometrija — 3 pokušaja po vežbi, pozicija 6 sec. Vrednosti u kg.',
+    isoEx_vp:'Vertical Pull',isoEx_kp:'Kvadriceps Pull',isoEx_zl:'Zadnja Loza',
+    isoEx_pr:'Prednje Rame',isoEx_bi:'Biceps',isoEx_sq:'Čučanj sa Pojasom',isoEx_sk:'Sklek',
+    sideR:'D',sideL:'L',
+    colExercise:'Vežba',colAvg:'Avg',colMax:'Max',optional:'opciono...',
+    disbHeader:'⚖️ Analiza disbalansa D / L',
+    disbExcellent:'Odlično',disbOK:'OK',disbModerate:'Umereni disbalans',disbSignificant:'Značajan disbalans',
+    disbDiff:'Razlika',disbStronger:'jača',
+    editBtn:'✏️ Izmeni',isoEditing:'✏️ Izmena testa od',
+    cancelBtn:'Otkaži',saveEdit:'✓ Sačuvaj izmene',isoEditSaved:'Izmene sačuvane! ✏️',
+    // FMS auto-comment
+    fmsAcExcellent:'✅ Odličan rezultat',fmsAcGood:'👍 Dobar rezultat',fmsAcAverage:'⚠️ Prosečan rezultat',fmsAcNeeds:'🔴 Korekcija neophodna',
+    fmsAcExcellentDesc:'održavaj postignuti nivo, dodaj funkcionalne i sportski-specifične treninge.',
+    fmsAcGoodDesc:'fokus na pojedinačne testove ispod ocene 3.',
+    fmsAcAverageDesc:'preporuka: korektivni rad PRE povećanja intenziteta treninga.',
+    fmsAcNeedsDesc:'fokus isključivo na korektivne vežbe, izbegavati visoki intenzitet.',
+    fmsAcPainAlert:'🚨 PAŽNJA: bol detektovan u',fmsAcPainTests1:'testu',fmsAcPainTests2:'testa',
+    fmsAcPainAdvice:'— obavezna konsultacija sa lekarom/fizioterapeutom pre nastavka.',
+    fmsAcCorrections:'📋 Korektivne preporuke:',
+    fmsAcAllPerfect:'🎯 Sve vežbe ocenjene maksimalnom ocenom 3 — odlična funkcionalna sposobnost!'
   }
 };
 
@@ -179,7 +200,26 @@ TR.en={
   rmSaved:'1RM test saved! 🏆',rmDeleted:'1RM test deleted.',rmEnter:'Enter at least one exercise!',
   rmProgress:'1RM Progress',rmTotal:'Total 1RM',rmBW:'Body weight',rmRatio:'BW Ratio',
   rmBeginner:'Beginner',rmNovice:'Novice',rmIntermediate:'Intermediate',rmAdvanced:'Advanced',rmElite:'Elite',
-  rmEnterBW:'Enter client weight for BW ratio',rmKg:'kg'
+  rmEnterBW:'Enter client weight for BW ratio',rmKg:'kg',
+  isoDesc:'Isometric — 3 attempts per exercise, hold 6 sec. Values in kg.',
+  isoEx_vp:'Vertical Pull',isoEx_kp:'Quadriceps Pull',isoEx_zl:'Hamstring Pull',
+  isoEx_pr:'Front Shoulder',isoEx_bi:'Biceps',isoEx_sq:'Belt Squat',isoEx_sk:'Push-up',
+  sideR:'R',sideL:'L',
+  colExercise:'Exercise',colAvg:'Avg',colMax:'Max',optional:'optional...',
+  disbHeader:'⚖️ Imbalance analysis R / L',
+  disbExcellent:'Excellent',disbOK:'OK',disbModerate:'Moderate imbalance',disbSignificant:'Significant imbalance',
+  disbDiff:'Difference',disbStronger:'stronger',
+  editBtn:'✏️ Edit',isoEditing:'✏️ Editing test from',
+  cancelBtn:'Cancel',saveEdit:'✓ Save changes',isoEditSaved:'Changes saved! ✏️',
+  fmsAcExcellent:'✅ Excellent result',fmsAcGood:'👍 Good result',fmsAcAverage:'⚠️ Average result',fmsAcNeeds:'🔴 Correction needed',
+  fmsAcExcellentDesc:'maintain current level, add functional and sport-specific training.',
+  fmsAcGoodDesc:'focus on individual tests below score 3.',
+  fmsAcAverageDesc:'recommendation: corrective work BEFORE increasing training intensity.',
+  fmsAcNeedsDesc:'focus exclusively on corrective exercises, avoid high intensity.',
+  fmsAcPainAlert:'🚨 ATTENTION: pain detected in',fmsAcPainTests1:'test',fmsAcPainTests2:'tests',
+  fmsAcPainAdvice:'— mandatory consultation with doctor/physiotherapist before continuing.',
+  fmsAcCorrections:'📋 Corrective recommendations:',
+  fmsAcAllPerfect:'🎯 All exercises scored 3 — excellent functional capacity!'
 };
 
 // Russian
@@ -261,7 +301,26 @@ TR.ru={
   rmSaved:'Тест 1ПМ сохранён! 🏆',rmDeleted:'Тест 1ПМ удалён.',rmEnter:'Введите хотя бы одно упражнение!',
   rmProgress:'Прогресс 1ПМ',rmTotal:'Общий 1ПМ',rmBW:'Масса тела',rmRatio:'Коэфф. к массе',
   rmBeginner:'Начинающий',rmNovice:'Средний',rmIntermediate:'Продвинутый',rmAdvanced:'Опытный',rmElite:'Элитный',
-  rmEnterBW:'Укажите вес клиента для расчёта',rmKg:'кг'
+  rmEnterBW:'Укажите вес клиента для расчёта',rmKg:'кг',
+  isoDesc:'Изометрия — 3 попытки на упражнение, удержание 6 сек. Значения в кг.',
+  isoEx_vp:'Вертикальная тяга',isoEx_kp:'Квадрицепс тяга',isoEx_zl:'Задняя поверхность бедра',
+  isoEx_pr:'Переднее плечо',isoEx_bi:'Бицепс',isoEx_sq:'Присед с поясом',isoEx_sk:'Отжимание',
+  sideR:'П',sideL:'Л',
+  colExercise:'Упражнение',colAvg:'Сред.',colMax:'Макс',optional:'необязательно...',
+  disbHeader:'⚖️ Анализ дисбаланса П / Л',
+  disbExcellent:'Отлично',disbOK:'OK',disbModerate:'Умеренный дисбаланс',disbSignificant:'Значительный дисбаланс',
+  disbDiff:'Разница',disbStronger:'сильнее',
+  editBtn:'✏️ Изменить',isoEditing:'✏️ Изменение теста от',
+  cancelBtn:'Отмена',saveEdit:'✓ Сохранить изменения',isoEditSaved:'Изменения сохранены! ✏️',
+  fmsAcExcellent:'✅ Отличный результат',fmsAcGood:'👍 Хороший результат',fmsAcAverage:'⚠️ Средний результат',fmsAcNeeds:'🔴 Требуется коррекция',
+  fmsAcExcellentDesc:'поддерживайте достигнутый уровень, добавьте функциональные и спортивно-специфические тренировки.',
+  fmsAcGoodDesc:'сосредоточьтесь на отдельных тестах ниже оценки 3.',
+  fmsAcAverageDesc:'рекомендация: корректирующая работа ДО увеличения интенсивности тренировок.',
+  fmsAcNeedsDesc:'фокус исключительно на корректирующих упражнениях, избегайте высокой интенсивности.',
+  fmsAcPainAlert:'🚨 ВНИМАНИЕ: боль обнаружена в',fmsAcPainTests1:'тесте',fmsAcPainTests2:'тестах',
+  fmsAcPainAdvice:'— обязательная консультация с врачом/физиотерапевтом перед продолжением.',
+  fmsAcCorrections:'📋 Корректирующие рекомендации:',
+  fmsAcAllPerfect:'🎯 Все упражнения оценены на 3 — отличные функциональные способности!'
 };
 
 function t(k){return (TR[lang]&&TR[lang][k])||TR.sr[k]||k;}
@@ -865,13 +924,34 @@ var ISO_EXERCISES=[
   {key:'sk',name:'Sklek',icon:'👐',sides:false}
 ];
 
+function isoExName(ex){
+  var k=ex.key;
+  if(k==='vp')return t('isoEx_vp');
+  if(k==='pr')return t('isoEx_pr');
+  if(k==='bi')return t('isoEx_bi');
+  if(k==='sq')return t('isoEx_sq');
+  if(k==='sk')return t('isoEx_sk');
+  if(k==='kpR')return t('isoEx_kp')+' ('+t('sideR')+')';
+  if(k==='kpL')return t('isoEx_kp')+' ('+t('sideL')+')';
+  if(k==='zlR')return t('isoEx_zl')+' ('+t('sideR')+')';
+  if(k==='zlL')return t('isoEx_zl')+' ('+t('sideL')+')';
+  return ex.name||k;
+}
+
+function isoPairLabel(key){
+  if(key==='kp')return t('isoEx_kp');
+  if(key==='zl')return t('isoEx_zl');
+  return key;
+}
+
 function buildTestSection(cid){
   var tests=getTests(cid);
 
   // FORM: each exercise has 3 attempts
   var formRows=ISO_EXERCISES.map(function(ex){
+    var exNm=isoExName(ex);
     return '<div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">'+
-      '<div style="font-size:11px;font-weight:600;color:var(--text);width:100px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="'+ex.name+'">'+ex.icon+' '+ex.name+'</div>'+
+      '<div style="font-size:11px;font-weight:600;color:var(--text);width:100px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="'+exNm+'">'+ex.icon+' '+exNm+'</div>'+
       '<input id="iso_'+ex.key+'_1" type="number" step="any" inputmode="decimal" placeholder="1." style="flex:1;min-width:0;padding:6px 2px;font-size:13px;border:1px solid var(--border2);border-radius:4px;background:var(--bg2);color:var(--text);font-family:inherit;text-align:center"/>'+
       '<input id="iso_'+ex.key+'_2" type="number" step="any" inputmode="decimal" placeholder="2." style="flex:1;min-width:0;padding:6px 2px;font-size:13px;border:1px solid var(--border2);border-radius:4px;background:var(--bg2);color:var(--text);font-family:inherit;text-align:center"/>'+
       '<input id="iso_'+ex.key+'_3" type="number" step="any" inputmode="decimal" placeholder="3." style="flex:1;min-width:0;padding:6px 2px;font-size:13px;border:1px solid var(--border2);border-radius:4px;background:var(--bg2);color:var(--text);font-family:inherit;text-align:center"/>'+
@@ -891,7 +971,7 @@ function buildTestSection(cid){
         var avg=d.avg||0;
         var maxV=Math.max(d.v1||0,d.v2||0,d.v3||0);
         return '<tr>'+
-          '<td style="padding:5px 6px;font-size:12px;color:var(--text);white-space:nowrap">'+ex.icon+' '+ex.name+'</td>'+
+          '<td style="padding:5px 6px;font-size:12px;color:var(--text);white-space:nowrap">'+ex.icon+' '+isoExName(ex)+'</td>'+
           '<td style="padding:5px 4px;font-size:11px;color:var(--text3);text-align:center">'+(d.v1||'—')+'</td>'+
           '<td style="padding:5px 4px;font-size:11px;color:var(--text3);text-align:center">'+(d.v2||'—')+'</td>'+
           '<td style="padding:5px 4px;font-size:11px;color:var(--text3);text-align:center">'+(d.v3||'—')+'</td>'+
@@ -903,12 +983,12 @@ function buildTestSection(cid){
       var resultsTable='<div style="overflow-x:auto;margin-bottom:12px">'+
         '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:var(--rs);overflow:hidden;font-family:inherit">'+
           '<thead><tr style="background:var(--bg2)">'+
-            '<th style="padding:6px;font-size:11px;color:var(--text2);text-align:left;font-weight:700">Vežba</th>'+
+            '<th style="padding:6px;font-size:11px;color:var(--text2);text-align:left;font-weight:700">'+t('colExercise')+'</th>'+
             '<th style="padding:6px;font-size:10px;color:var(--text3);text-align:center;font-weight:600">1.</th>'+
             '<th style="padding:6px;font-size:10px;color:var(--text3);text-align:center;font-weight:600">2.</th>'+
             '<th style="padding:6px;font-size:10px;color:var(--text3);text-align:center;font-weight:600">3.</th>'+
-            '<th style="padding:6px;font-size:11px;color:var(--red);text-align:center;font-weight:700">Avg</th>'+
-            '<th style="padding:6px;font-size:11px;color:var(--green);text-align:center;font-weight:700">Max</th>'+
+            '<th style="padding:6px;font-size:11px;color:var(--red);text-align:center;font-weight:700">'+t('colAvg')+'</th>'+
+            '<th style="padding:6px;font-size:11px;color:var(--green);text-align:center;font-weight:700">'+t('colMax')+'</th>'+
           '</tr></thead>'+
           '<tbody>'+tableRows+'</tbody>'+
         '</table>'+
@@ -916,8 +996,8 @@ function buildTestSection(cid){
 
       // --- DISBALANCE ANALYSIS (D vs L) ---
       var pairs=[
-        {nameR:'kpR',nameL:'kpL',label:'Kvadriceps Pull'},
-        {nameR:'zlR',nameL:'zlL',label:'Zadnja Loza'}
+        {nameR:'kpR',nameL:'kpL',pairKey:'kp'},
+        {nameR:'zlR',nameL:'zlL',pairKey:'zl'}
       ];
       var disbalanceRows=pairs.map(function(pair){
         var dR=te.data&&te.data[pair.nameR];
@@ -927,28 +1007,27 @@ function buildTestSection(cid){
         var avgL=dL?dL.avg:0;
         var maxR=dR?Math.max(dR.v1||0,dR.v2||0,dR.v3||0):0;
         var maxL=dL?Math.max(dL.v1||0,dL.v2||0,dL.v3||0):0;
-        var bigger=avgR>=avgL?'D':'L';
-        var smaller=avgR>=avgL?'L':'D';
+        var bigger=avgR>=avgL?t('sideR'):t('sideL');
         var diff=Math.abs(avgR-avgL);
         var maxAvg=Math.max(avgR,avgL);
         var pct=maxAvg>0?Math.round(diff/maxAvg*100):0;
         var barR=maxAvg>0?Math.round(avgR/maxAvg*100):0;
         var barL=maxAvg>0?Math.round(avgL/maxAvg*100):0;
-        var status=pct<=5?'Odlično':pct<=10?'OK':pct<=15?'Umereni disbalans':'Značajan disbalans';
+        var status=pct<=5?t('disbExcellent'):pct<=10?t('disbOK'):pct<=15?t('disbModerate'):t('disbSignificant');
         var statusCol=pct<=5?'var(--green)':pct<=10?'var(--amber)':pct<=15?'#e65100':'var(--red)';
         var statusBg=pct<=5?'var(--gbg)':pct<=10?'var(--abg)':pct<=15?'#fff3e0':'var(--redbg)';
 
         return '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;margin-bottom:8px">'+
-          '<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">'+pair.label+'</div>'+
+          '<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">'+isoPairLabel(pair.pairKey)+'</div>'+
           '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
-            '<div style="width:24px;font-size:11px;font-weight:700;color:var(--text2)">D</div>'+
+            '<div style="width:24px;font-size:11px;font-weight:700;color:var(--text2)">'+t('sideR')+'</div>'+
             '<div style="flex:1;height:20px;background:var(--bg3);border-radius:4px;overflow:hidden;position:relative">'+
               '<div style="height:100%;width:'+barR+'%;background:var(--red);border-radius:4px;transition:width .3s"></div>'+
             '</div>'+
             '<div style="width:55px;font-size:13px;font-weight:700;color:var(--text);text-align:right">'+avgR.toFixed(1)+' kg</div>'+
           '</div>'+
           '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'+
-            '<div style="width:24px;font-size:11px;font-weight:700;color:var(--text2)">L</div>'+
+            '<div style="width:24px;font-size:11px;font-weight:700;color:var(--text2)">'+t('sideL')+'</div>'+
             '<div style="flex:1;height:20px;background:var(--bg3);border-radius:4px;overflow:hidden;position:relative">'+
               '<div style="height:100%;width:'+barL+'%;background:#1a56db;border-radius:4px;transition:width .3s"></div>'+
             '</div>'+
@@ -956,14 +1035,14 @@ function buildTestSection(cid){
           '</div>'+
           '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:'+statusBg+';border-radius:var(--rs)">'+
             '<div style="font-size:12px;color:'+statusCol+';font-weight:600">'+status+'</div>'+
-            '<div style="font-size:12px;color:'+statusCol+'">Razlika: '+diff.toFixed(1)+' kg ('+pct+'%) — '+bigger+' jača</div>'+
+            '<div style="font-size:12px;color:'+statusCol+'">'+t('disbDiff')+': '+diff.toFixed(1)+' kg ('+pct+'%) — '+bigger+' '+t('disbStronger')+'</div>'+
           '</div>'+
         '</div>';
       }).filter(function(r){return r;}).join('');
 
       var disbalanceSection=disbalanceRows?
         '<div style="margin-top:4px;margin-bottom:4px">'+
-          '<div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">⚖️ Analiza disbalansa D / L</div>'+
+          '<div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">'+t('disbHeader')+'</div>'+
           disbalanceRows+
         '</div>':'';
 
@@ -973,7 +1052,7 @@ function buildTestSection(cid){
           (te.note?'<div style="font-size:11px;color:var(--text3);margin-top:2px">'+te.note+'</div>':'')+
           '</div>'+
           '<div style="display:flex;gap:6px">'+
-            '<button class="btn btnsm" style="padding:3px 8px;font-size:11px" onclick="window.editIsoTest('+cid+','+realIdx+');event.stopPropagation();">✏️ Izmeni</button>'+
+            '<button class="btn btnsm" style="padding:3px 8px;font-size:11px" onclick="window.editIsoTest('+cid+','+realIdx+');event.stopPropagation();">'+t('editBtn')+'</button>'+
             '<button class="btn btnsm btnr" style="padding:3px 8px;font-size:11px" onclick="window.delTestNow('+cid+','+realIdx+');event.stopPropagation();">×</button>'+
           '</div>'+
         '</div>'+
@@ -987,17 +1066,17 @@ function buildTestSection(cid){
 
   return '<div class="profsec">'+
     '<div class="profsect">🧪 '+t('testing')+'</div>'+
-    '<div style="font-size:12px;color:var(--text3);margin-bottom:10px">Izometrija — 3 pokušaja po vežbi, pozicija 6 sec. Vrednosti u kg.</div>'+
+    '<div style="font-size:12px;color:var(--text3);margin-bottom:10px">'+t('isoDesc')+'</div>'+
     formRows+
     '<div style="display:flex;gap:8px;margin-bottom:6px">'+
-      '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📅 Datum</div><input id="iso_date" type="date" value="'+today()+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none"/></div>'+
-      '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 Napomena</div><input id="iso_note" placeholder="opciono..." style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
+      '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📅 '+t('date')+'</div><input id="iso_date" type="date" value="'+today()+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none"/></div>'+
+      '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 '+t('testNote')+'</div><input id="iso_note" placeholder="'+t('optional')+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
     '</div>'+
     (editingIsoIdx&&editingIsoIdx.cid===cid?
-      '<div style="background:var(--abg);border:1px solid var(--amber);border-radius:var(--rs);padding:8px 12px;margin-top:6px;font-size:12px;color:var(--amber);font-weight:600;text-align:center">✏️ Izmena testa od '+(getTests(cid)[editingIsoIdx.idx]?fmtD(getTests(cid)[editingIsoIdx.idx].date):'')+'</div>'+
+      '<div style="background:var(--abg);border:1px solid var(--amber);border-radius:var(--rs);padding:8px 12px;margin-top:6px;font-size:12px;color:var(--amber);font-weight:600;text-align:center">'+t('isoEditing')+' '+(getTests(cid)[editingIsoIdx.idx]?fmtD(getTests(cid)[editingIsoIdx.idx].date):'')+'</div>'+
       '<div style="display:flex;gap:6px;margin-top:6px">'+
-        '<button class="btn btnsm" style="flex:1;padding:10px" onclick="window.cancelIsoEdit('+cid+')">Otkaži</button>'+
-        '<button class="btn btnp btnsm" style="flex:2;padding:10px" onclick="addTest('+cid+')">✓ Sačuvaj izmene</button>'+
+        '<button class="btn btnsm" style="flex:1;padding:10px" onclick="window.cancelIsoEdit('+cid+')">'+t('cancelBtn')+'</button>'+
+        '<button class="btn btnp btnsm" style="flex:2;padding:10px" onclick="addTest('+cid+')">'+t('saveEdit')+'</button>'+
       '</div>'
     :
       '<button class="btn btnp btnsm" style="width:100%;padding:10px;margin-top:6px" onclick="addTest('+cid+')">'+t('addTest')+'</button>'
@@ -1037,7 +1116,7 @@ function addTest(cid){
   sv();
   openProf(cid);
   setTimeout(function(){switchProfTab('tests',cid);switchTestTab('iso',cid);},50);
-  toast(isEditing?'Izmene sačuvane! ✏️':t('testSaved'));
+  toast(isEditing?t('isoEditSaved'):t('testSaved'));
 }
 
 function delTest(cid,idx){
@@ -1069,78 +1148,73 @@ var FMS_SCORE_COLORS={
 };
 var FMS_SCORE_KEYS=['fmsScore0','fmsScore1','fmsScore2','fmsScore3'];
 
-// Korektivne preporuke po testu i oceni (0=bol, 1=ne izvodi, 2=kompenzacija)
+// Korektivne preporuke po jeziku, testu i oceni (0=bol, 1=ne izvodi, 2=kompenzacija)
 var FMS_CORRECTIONS={
-  deep_squat:{
-    0:'⚠️ Duboki čučanj — BOL: prekini test i uputi klijenta specijalisti.',
-    1:'Duboki čučanj: mobilnost skočnih (dorzifleksija), kukova i torakalne kičme. Vežbe: ankle wall test, hip 90/90, foam roll T-spine.',
-    2:'Duboki čučanj: stretching kukova i lista, goblet squat sa peticom podignutom (3–5°), heel elevated squat.'
+  sr:{
+    deep_squat:{0:'⚠️ Duboki čučanj — BOL: prekini test i uputi klijenta specijalisti.',1:'Duboki čučanj: mobilnost skočnih (dorzifleksija), kukova i torakalne kičme. Vežbe: ankle wall test, hip 90/90, foam roll T-spine.',2:'Duboki čučanj: stretching kukova i lista, goblet squat sa peticom podignutom (3–5°), heel elevated squat.'},
+    hurdle_step:{0:'⚠️ Korak preko prepone — BOL: uputi specijalisti.',1:'Korak preko prepone: stabilnost na jednoj nozi, jačanje gluteus medius. Vežbe: single leg balance, side-lying clamshell, monster walks.',2:'Korak preko prepone: single leg deadlift, hip flexor stretch (kneeling), step-up sa kontrolom karlice.'},
+    inline_lunge:{0:'⚠️ Iskorak u liniji — BOL: uputi specijalisti.',1:'Iskorak u liniji: mobilnost skočnih, hip flexor stretch, anti-rotacija core-a. Vežbe: half-kneeling Pallof press, kneeling hip flexor stretch.',2:'Iskorak u liniji: statički iskorak (split squat hold), torakalna rotacija (open book), reverse lunge progresija.'},
+    shoulder_mob:{0:'⚠️ Mobilnost ramena — BOL: uputi specijalisti (impingement test).',1:'Mobilnost ramena: torakalna mobilnost, sleeper stretch, pec minor stretch. Vežbe: foam roll T-spine, doorway pec stretch, cross-body stretch.',2:'Mobilnost ramena: skapularna mobilnost (wall slides), lat stretching, band dislocates.'},
+    aslr:{0:'⚠️ Podizanje noge — BOL: uputi specijalisti.',1:'ASLR: mobilnost hamstringsa, aktivna stabilnost karlice. Vežbe: supine hamstring stretch (band), dead bug, posterior pelvic tilt.',2:'ASLR: hamstring stretching (PNF), dead bug progresija, hip flexor mobilnost (couch stretch).'},
+    trunk_pushup:{0:'⚠️ Stabilnost trupa — BOL: uputi specijalisti (LBP screening).',1:'Stabilnost trupa: plank progresije, anti-ekstenzioni rad core-a. Vežbe: plank with knee, modified push-up, dead bug.',2:'Stabilnost trupa: hollow body hold, izdržljivost trupa, full plank → push-up progresija.'},
+    rotary_stab:{0:'⚠️ Rotatorna stabilnost — BOL: uputi specijalisti.',1:'Rotatorna stabilnost: bird dog, dead bug, anti-rotacioni rad. Vežbe: bird dog (3×8 po strani), Pallof press, side plank.',2:'Rotatorna stabilnost: Pallof press progresija, dijagonalni patterns (chop/lift), kneeling cable rotation.'}
   },
-  hurdle_step:{
-    0:'⚠️ Korak preko prepone — BOL: uputi specijalisti.',
-    1:'Korak preko prepone: stabilnost na jednoj nozi, jačanje gluteus medius. Vežbe: single leg balance, side-lying clamshell, monster walks.',
-    2:'Korak preko prepone: single leg deadlift, hip flexor stretch (kneeling), step-up sa kontrolom karlice.'
+  en:{
+    deep_squat:{0:'⚠️ Deep Squat — PAIN: stop test and refer client to specialist.',1:'Deep Squat: ankle (dorsiflexion), hip and thoracic spine mobility. Exercises: ankle wall test, hip 90/90, foam roll T-spine.',2:'Deep Squat: hip and calf stretching, goblet squat with heel raised (3–5°), heel elevated squat.'},
+    hurdle_step:{0:'⚠️ Hurdle Step — PAIN: refer to specialist.',1:'Hurdle Step: single-leg stability, gluteus medius strengthening. Exercises: single leg balance, side-lying clamshell, monster walks.',2:'Hurdle Step: single leg deadlift, kneeling hip flexor stretch, step-up with pelvic control.'},
+    inline_lunge:{0:'⚠️ Inline Lunge — PAIN: refer to specialist.',1:'Inline Lunge: ankle mobility, hip flexor stretch, anti-rotation core. Exercises: half-kneeling Pallof press, kneeling hip flexor stretch.',2:'Inline Lunge: static lunge (split squat hold), thoracic rotation (open book), reverse lunge progression.'},
+    shoulder_mob:{0:'⚠️ Shoulder Mobility — PAIN: refer to specialist (impingement test).',1:'Shoulder Mobility: thoracic mobility, sleeper stretch, pec minor stretch. Exercises: foam roll T-spine, doorway pec stretch, cross-body stretch.',2:'Shoulder Mobility: scapular mobility (wall slides), lat stretching, band dislocates.'},
+    aslr:{0:'⚠️ Active Leg Raise — PAIN: refer to specialist.',1:'ASLR: hamstring mobility, active pelvic stability. Exercises: supine hamstring stretch (band), dead bug, posterior pelvic tilt.',2:'ASLR: hamstring stretching (PNF), dead bug progression, hip flexor mobility (couch stretch).'},
+    trunk_pushup:{0:'⚠️ Trunk Stability — PAIN: refer to specialist (LBP screening).',1:'Trunk Stability: plank progressions, anti-extension core work. Exercises: plank with knee, modified push-up, dead bug.',2:'Trunk Stability: hollow body hold, trunk endurance, full plank → push-up progression.'},
+    rotary_stab:{0:'⚠️ Rotary Stability — PAIN: refer to specialist.',1:'Rotary Stability: bird dog, dead bug, anti-rotation work. Exercises: bird dog (3×8 per side), Pallof press, side plank.',2:'Rotary Stability: Pallof press progression, diagonal patterns (chop/lift), kneeling cable rotation.'}
   },
-  inline_lunge:{
-    0:'⚠️ Iskorak u liniji — BOL: uputi specijalisti.',
-    1:'Iskorak u liniji: mobilnost skočnih, hip flexor stretch, anti-rotacija core-a. Vežbe: half-kneeling Pallof press, kneeling hip flexor stretch.',
-    2:'Iskorak u liniji: statički iskorak (split squat hold), torakalna rotacija (open book), reverse lunge progresija.'
-  },
-  shoulder_mob:{
-    0:'⚠️ Mobilnost ramena — BOL: uputi specijalisti (impingement test).',
-    1:'Mobilnost ramena: torakalna mobilnost, sleeper stretch, pec minor stretch. Vežbe: foam roll T-spine, doorway pec stretch, cross-body stretch.',
-    2:'Mobilnost ramena: skapularna mobilnost (wall slides), lat stretching, band dislocates.'
-  },
-  aslr:{
-    0:'⚠️ Podizanje noge — BOL: uputi specijalisti.',
-    1:'ASLR: mobilnost hamstringsa, aktivna stabilnost karlice. Vežbe: supine hamstring stretch (band), dead bug, posterior pelvic tilt.',
-    2:'ASLR: hamstring stretching (PNF), dead bug progresija, hip flexor mobilnost (couch stretch).'
-  },
-  trunk_pushup:{
-    0:'⚠️ Stabilnost trupa — BOL: uputi specijalisti (LBP screening).',
-    1:'Stabilnost trupa: plank progresije, anti-ekstenzioni rad core-a. Vežbe: plank with knee, modified push-up, dead bug.',
-    2:'Stabilnost trupa: hollow body hold, izdržljivost trupa, full plank → push-up progresija.'
-  },
-  rotary_stab:{
-    0:'⚠️ Rotatorna stabilnost — BOL: uputi specijalisti.',
-    1:'Rotatorna stabilnost: bird dog, dead bug, anti-rotacioni rad. Vežbe: bird dog (3×8 po strani), Pallof press, side plank.',
-    2:'Rotatorna stabilnost: Pallof press progresija, dijagonalni patterns (chop/lift), kneeling cable rotation.'
+  ru:{
+    deep_squat:{0:'⚠️ Глубокий присед — БОЛЬ: прекратите тест и направьте клиента к специалисту.',1:'Глубокий присед: подвижность голеностопов (дорсифлексия), бёдер и грудного отдела. Упражнения: ankle wall test, hip 90/90, foam roll T-spine.',2:'Глубокий присед: растяжка бёдер и икр, goblet squat с поднятой пяткой (3–5°), heel elevated squat.'},
+    hurdle_step:{0:'⚠️ Шаг через барьер — БОЛЬ: направьте к специалисту.',1:'Шаг через барьер: стабильность на одной ноге, укрепление средней ягодичной. Упражнения: single leg balance, side-lying clamshell, monster walks.',2:'Шаг через барьер: single leg deadlift, kneeling hip flexor stretch, step-up с контролем таза.'},
+    inline_lunge:{0:'⚠️ Выпад в линию — БОЛЬ: направьте к специалисту.',1:'Выпад в линию: подвижность голеностопов, растяжка hip flexor, антиротация кора. Упражнения: half-kneeling Pallof press, kneeling hip flexor stretch.',2:'Выпад в линию: статический выпад (split squat hold), грудная ротация (open book), прогрессия reverse lunge.'},
+    shoulder_mob:{0:'⚠️ Подвижность плеч — БОЛЬ: направьте к специалисту (impingement test).',1:'Подвижность плеч: подвижность грудного отдела, sleeper stretch, pec minor stretch. Упражнения: foam roll T-spine, doorway pec stretch, cross-body stretch.',2:'Подвижность плеч: подвижность лопаток (wall slides), растяжка lat, band dislocates.'},
+    aslr:{0:'⚠️ Подъём ноги — БОЛЬ: направьте к специалисту.',1:'ASLR: подвижность подколенных, активная стабильность таза. Упражнения: supine hamstring stretch (band), dead bug, posterior pelvic tilt.',2:'ASLR: растяжка подколенных (PNF), прогрессия dead bug, подвижность hip flexor (couch stretch).'},
+    trunk_pushup:{0:'⚠️ Стабильность торса — БОЛЬ: направьте к специалисту (LBP screening).',1:'Стабильность торса: прогрессии планки, антиэкстензионная работа кора. Упражнения: plank with knee, modified push-up, dead bug.',2:'Стабильность торса: hollow body hold, выносливость торса, полная планка → push-up прогрессия.'},
+    rotary_stab:{0:'⚠️ Вращательная стабильность — БОЛЬ: направьте к специалисту.',1:'Вращательная стабильность: bird dog, dead bug, антиротационная работа. Упражнения: bird dog (3×8 на сторону), Pallof press, side plank.',2:'Вращательная стабильность: прогрессия Pallof press, диагональные паттерны (chop/lift), kneeling cable rotation.'}
   }
 };
 
 function generateFMSAutoComment(scores,total){
   var lines=[];
-  // Ukupna ocena
-  if(total>=18) lines.push('✅ Odličan rezultat ('+total+'/21) — održavaj postignuti nivo, dodaj funkcionalne i sportski-specifične treninge.');
-  else if(total>=15) lines.push('👍 Dobar rezultat ('+total+'/21) — fokus na pojedinačne testove ispod ocene 3.');
-  else if(total>=11) lines.push('⚠️ Prosečan rezultat ('+total+'/21) — preporuka: korektivni rad PRE povećanja intenziteta treninga.');
-  else lines.push('🔴 Korekcija neophodna ('+total+'/21) — fokus isključivo na korektivne vežbe, izbegavati visoki intenzitet.');
+  var corr=FMS_CORRECTIONS[lang]||FMS_CORRECTIONS.sr;
 
-  // Detekcija bola (ocena 0) — prioritet
+  // Ukupna ocena
+  if(total>=18) lines.push(t('fmsAcExcellent')+' ('+total+'/21) — '+t('fmsAcExcellentDesc'));
+  else if(total>=15) lines.push(t('fmsAcGood')+' ('+total+'/21) — '+t('fmsAcGoodDesc'));
+  else if(total>=11) lines.push(t('fmsAcAverage')+' ('+total+'/21) — '+t('fmsAcAverageDesc'));
+  else lines.push(t('fmsAcNeeds')+' ('+total+'/21) — '+t('fmsAcNeedsDesc'));
+
+  // Detekcija bola
   var painTests=[];
   FMS_DATA.forEach(function(ex){if(scores[ex.key]===0)painTests.push(ex.key);});
   if(painTests.length>0){
     lines.push('');
-    lines.push('🚨 PAŽNJA: bol detektovan u '+painTests.length+' test'+(painTests.length>1?'a':'u')+' — obavezna konsultacija sa lekarom/fizioterapeutom pre nastavka.');
+    var tw=painTests.length>1?t('fmsAcPainTests2'):t('fmsAcPainTests1');
+    lines.push(t('fmsAcPainAlert')+' '+painTests.length+' '+tw+' '+t('fmsAcPainAdvice'));
   }
 
-  // Specifične preporuke po testu (ocene 0,1,2)
+  // Specifične preporuke po testu
   var hasCorrections=false;
   var corrections=[];
   FMS_DATA.forEach(function(ex){
     var v=scores[ex.key];
     if(v===undefined||v===3)return;
-    var rec=FMS_CORRECTIONS[ex.key]&&FMS_CORRECTIONS[ex.key][v];
+    var rec=corr[ex.key]&&corr[ex.key][v];
     if(rec){corrections.push('• '+rec);hasCorrections=true;}
   });
 
   if(hasCorrections){
     lines.push('');
-    lines.push('📋 Korektivne preporuke:');
+    lines.push(t('fmsAcCorrections'));
     lines=lines.concat(corrections);
   } else {
     lines.push('');
-    lines.push('🎯 Sve vežbe ocenjene maksimalnom ocenom 3 — odlična funkcionalna sposobnost!');
+    lines.push(t('fmsAcAllPerfect'));
   }
 
   return lines.join('\n');
@@ -1266,7 +1340,7 @@ function buildFMSSection(cid){
   // DATE + NOTE
   var dateNote='<div style="display:flex;gap:8px;margin:8px 0">'+
     '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📅 '+t('date')+'</div><input id="fms_date" type="date" value="'+today()+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none"/></div>'+
-    '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 '+t('testNote')+'</div><input id="fms_note" placeholder="opciono..." style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
+    '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 '+t('testNote')+'</div><input id="fms_note" placeholder="'+t('optional')+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
   '</div>';
 
   // SAVE BUTTON
@@ -1316,7 +1390,7 @@ function buildFMSSection(cid){
         '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><span class="fms-cat" style="background:'+cat.bg+';color:'+cat.color+'">'+t(cat.label)+'</span></div>'+
         '<div class="fms-hist-grid" style="margin-bottom:8px">'+chips+'</div>'+
         '<div style="display:flex;justify-content:center">'+miniRadar+'</div>'+
-        '<div style="margin-top:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-left:3px solid '+cat.color+';border-radius:var(--rs);font-size:11.5px;line-height:1.55;color:var(--text);white-space:pre-wrap">'+(te.autoComment||generateFMSAutoComment(te.scores,te.total))+'</div>'+
+        '<div style="margin-top:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-left:3px solid '+cat.color+';border-radius:var(--rs);font-size:11.5px;line-height:1.55;color:var(--text);white-space:pre-wrap">'+generateFMSAutoComment(te.scores,te.total)+'</div>'+
       '</div>';
     }).join('');
   } else {
@@ -1523,7 +1597,7 @@ function buildRuffierSection(cid){
   // DATE + NOTE
   var dateNote='<div style="display:flex;gap:8px;margin:8px 0">'+
     '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📅 '+t('date')+'</div><input id="ruf_date" type="date" value="'+today()+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none"/></div>'+
-    '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 '+t('testNote')+'</div><input id="ruf_note" placeholder="opciono..." style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
+    '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 '+t('testNote')+'</div><input id="ruf_note" placeholder="'+t('optional')+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
   '</div>';
 
   // SAVE
@@ -1766,7 +1840,7 @@ function build1RMSection(cid){
   // DATE + NOTE
   var dateNote='<div style="display:flex;gap:8px;margin:8px 0">'+
     '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📅 '+t('date')+'</div><input id="rm_date" type="date" value="'+today()+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none"/></div>'+
-    '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 '+t('testNote')+'</div><input id="rm_note" placeholder="opciono..." style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
+    '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 '+t('testNote')+'</div><input id="rm_note" placeholder="'+t('optional')+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
   '</div>';
 
   // SAVE
