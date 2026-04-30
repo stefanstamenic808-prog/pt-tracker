@@ -48,7 +48,10 @@
       <div class="hdr-icon"><svg width="18" height="18" viewBox="0 0 100 100"><text y="72" x="50" text-anchor="middle" font-size="62" font-family="Arial Black,sans-serif" fill="white" font-weight="900">SF</text></svg></div>
       <div class="hdr-name">STAMENIC<span>FITT</span></div>
     </div>
-    <button class="hdr-btn" id="darkBtn" onclick="togDark()">☀️</button>
+    <div class="hdr-actions">
+      <span id="syncStatus" class="sync-status sync-online" title="Sinhronizovano"></span>
+      <button class="hdr-btn" id="darkBtn" onclick="togDark()">☀️</button>
+    </div>
   </div>
   <div class="content" id="content"></div>
   <nav class="bnav" id="bnav"></nav>
@@ -210,6 +213,16 @@
   </div>
 </div>
 
+<script>
+// Registruj service worker za offline rad
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./service-worker.js').catch(function(err){
+      console.warn('Service worker registration failed:', err);
+    });
+  });
+}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/db.js"></script>

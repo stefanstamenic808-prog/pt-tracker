@@ -2483,6 +2483,27 @@ window.delTestNow=function(cid,idx){
   }
 };
 
+// // --- SYNC STATUS INDICATOR --------------------------------
+function updateSyncStatus(){
+  var el=document.getElementById('syncStatus');
+  if(!el)return;
+  var online = (typeof navigator==='undefined') || navigator.onLine!==false;
+  var dirty = localStorage.getItem('pt_state_dirty')==='1';
+  if(!online){
+    el.className='sync-status sync-offline';
+    el.title='Offline — promene se čuvaju lokalno';
+  } else if(dirty){
+    el.className='sync-status sync-pending';
+    el.title='Sinhronizacija u toku...';
+  } else {
+    el.className='sync-status sync-online';
+    el.title='Sinhronizovano';
+  }
+}
+window.addEventListener('syncStatusChange', updateSyncStatus);
+window.addEventListener('online', updateSyncStatus);
+window.addEventListener('offline', updateSyncStatus);
+
 // // --- INIT -------------------------------------------------
 // Bootstrap se pokreće iz auth.js nakon uspešne prijave
 window.initApp = async function(){
@@ -2491,6 +2512,7 @@ window.initApp = async function(){
   renderNav();
   renderPage();
   setTimeout(buildGrpFilter,50);
+  updateSyncStatus();
 
   // 2) Povuci sveže podatke iz cloud-a u pozadini
   try{
