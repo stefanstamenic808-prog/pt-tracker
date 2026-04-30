@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="StamenicFitt"/>
+<meta name="theme-color" content="#111"/>
+<title>StamenicFitt</title>
+<link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+<div id="app">
+  <div class="hdr">
+    <div class="hdr-logo">
+      <div class="hdr-icon"><svg width="18" height="18" viewBox="0 0 100 100"><text y="72" x="50" text-anchor="middle" font-size="62" font-family="Arial Black,sans-serif" fill="white" font-weight="900">SF</text></svg></div>
+      <div class="hdr-name">STAMENIC<span>FITT</span></div>
+    </div>
+    <button class="hdr-btn" id="darkBtn" onclick="togDark()">☀️</button>
+  </div>
+  <div class="content" id="content"></div>
+  <nav class="bnav" id="bnav"></nav>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- CLIENT MODAL -->
+<div class="mbg" id="mC">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mCt">Novi klijent</div>
+    <div class="field"><label>Ime i prezime</label><input id="fn" placeholder="npr. Ana Popović" autocomplete="name"/></div>
+    <div class="field"><label>Paket (opciono)</label><div class="psgrp" id="fpg"></div></div>
+    <div class="field"><label>Datum početka</label><input type="date" id="fstart"/></div>
+    <div class="field"><label>Status</label>
+      <select id="fst">
+        <option value="active">Aktivan</option>
+        <option value="due">Plaćanje dospelo</option>
+        <option value="overdue">Kasni</option>
+        <option value="paused">Pauza</option>
+      </select>
+    </div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mC')">Otkaži</button>
+      <button class="btn btnp" onclick="saveC()">Sačuvaj</button>
+    </div>
+  </div>
+</div>
+
+<!-- RENEW MODAL -->
+<div class="mbg" id="mRen">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mRent">Produži članarinu</div>
+    <div class="rinfo" id="mReni"></div>
+    <div class="field"><label>Izaberi paket</label><div class="psgrp" id="rpg"></div></div>
+    <div class="field"><label>Datum početka novog perioda</label><input type="date" id="rstart"/></div>
+    <div class="field"><label>Status</label>
+      <div class="rsgrp">
+        <div class="rsopt on" id="rsa" onclick="selRS('active')"><div class="rslbl">Aktivan</div><div class="rssub">Klijent je platio</div></div>
+        <div class="rsopt" id="rsd" onclick="selRS('due')"><div class="rslbl">Čeka uplatu</div><div class="rssub">Još nije platio</div></div>
+      </div>
+    </div>
+    <div class="field"><label>Napomena (opciono)</label><input id="rnote" placeholder="npr. Plaćeno keš..."/></div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mRen')">Otkaži</button>
+      <button class="btn btnp" onclick="doRenew()">Produži članarinu</button>
+    </div>
+  </div>
+</div>
+
+<!-- PKG MODAL -->
+<div class="mbg" id="mPkg">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mPkgt">Novi paket</div>
+    <div class="field"><label>Tip treninga</label>
+      <div class="tygrp">
+        <div class="tyopt" id="typ" onclick="selTy('p')"><div style="font-size:20px;margin-bottom:4px">👤</div><div style="font-size:11px;font-weight:600;color:var(--text)">Personalni</div><div style="font-size:10px;color:var(--text3)">1 na 1</div></div>
+        <div class="tyopt" id="tys" onclick="selTy('s')"><div style="font-size:20px;margin-bottom:4px">👥</div><div style="font-size:11px;font-weight:600;color:var(--text)">Polu-pers.</div><div style="font-size:10px;color:var(--text3)">2–4 osobe</div></div>
+        <div class="tyopt" id="tyg" onclick="selTy('g')"><div style="font-size:20px;margin-bottom:4px">🏃</div><div style="font-size:11px;font-weight:600;color:var(--text)">Grupni</div><div style="font-size:10px;color:var(--text3)">5+ osoba</div></div>
+      </div>
+    </div>
+    <div class="field"><label>Broj treninga</label><input type="number" id="pses" placeholder="npr. 12" inputmode="numeric"/></div>
+    <div class="field"><label>Cena (€)</label><input type="number" id="pprc" placeholder="npr. 80" inputmode="numeric"/></div>
+    <div class="field"><label>Naziv (opciono)</label><input id="pnam" placeholder="npr. Gold, Starter..."/></div>
+    <div style="font-size:12px;color:var(--text3);padding:9px 12px;background:var(--bg3);border-radius:var(--rs)">Paket traje <strong>30 dana</strong>.</div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mPkg')">Otkaži</button>
+      <button class="btn btnp" onclick="savePkg()">Sačuvaj paket</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOG MODAL -->
+<div class="mbg" id="mLog">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">Unesi trening</div>
+    <div class="field"><label>Klijent</label><select id="lc"></select></div>
+    <div class="field"><label>Datum</label><input type="date" id="ld"/></div>
+    <div class="field2">
+      <div class="field"><label>Trajanje (min)</label><input type="number" id="ldur" placeholder="60" inputmode="numeric"/></div>
+      <div class="field"><label>Tip</label><select id="lty"><option>Snaga</option><option>Kardio</option><option>HIIT</option><option>Mobilnost</option><option>Kombinirano</option></select></div>
+    </div>
+    <div class="field"><label>Napomena</label><textarea id="lnote" placeholder="opciono..."></textarea></div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mLog')">Otkaži</button>
+      <button class="btn btnp" onclick="saveLog()">Sačuvaj</button>
+    </div>
+  </div>
+</div>
+
+<!-- GROUP MODAL -->
+<div class="mbg" id="mGrp">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mGrpt">Nova grupa</div>
+    <div class="field"><label>Naziv grupe</label><input id="gnam" placeholder="npr. Jutarnja, VIP..."/></div>
+    <div class="field"><label>Boja</label><div class="colrow" id="gcolrow"></div></div>
+    <div class="field"><label>Klijenti</label><div id="gmembers"></div></div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mGrp')">Otkaži</button>
+      <button class="btn btnp" onclick="saveGrp()">Sačuvaj</button>
+    </div>
+  </div>
+</div>
+
+<!-- SLOT MODAL -->
+<div class="mbg" id="mSlot">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mSlott">Novi termin</div>
+    <div class="field"><label>Klijent</label><div class="cplist" id="sltcp"></div></div>
+    <div class="field2">
+      <div class="field"><label>Vreme</label><select id="slttime"></select></div>
+      <div class="field"><label>Trajanje</label>
+        <select id="sltdur">
+          <option value="30">30 min</option>
+          <option value="45">45 min</option>
+          <option value="60" selected>60 min</option>
+          <option value="90">90 min</option>
+          <option value="120">120 min</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Napomena (opciono)</label><input id="sltnote" placeholder="npr. Snaga, HIIT..."/></div>
+    <div id="sltdelbtn" style="display:none;margin-top:4px">
+      <button class="btn btnr" style="width:100%;padding:10px" onclick="delSlot()">Obriši termin</button>
+    </div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mSlot')">Otkaži</button>
+      <button class="btn btnp" onclick="saveSlot()">Sačuvaj termin</button>
+    </div>
+  </div>
+</div>
+
+<!-- WA TPL MODAL -->
+<div class="mbg" id="mWA">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">Uredi WhatsApp šablon</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Koristi: {ime} {dani} {datum} {paket} {cena}</div>
+    <div class="field"><label>Tekst poruke</label><textarea id="watpl" style="min-height:150px;font-size:14px"></textarea></div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mWA')">Otkaži</button>
+      <button class="btn btnp" onclick="saveWaTpl()">Sačuvaj šablon</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="mbg" id="mProf">
+  <div class="modal" style="max-height:92vh">
+    <div class="mhandle"></div>
+    <div id="profbody"></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
