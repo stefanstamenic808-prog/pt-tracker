@@ -2503,7 +2503,6 @@ window.initApp = async function(){
         setTimeout(buildGrpFilter,50);
       } else {
         // Prvi login — nema podataka u cloud-u, čistimo lokalni cache
-        // (može biti stari demo data od pre auth-a)
         pkgs=[];clients=[];sessions=[];groups=[];slots=[];
         sv();
         renderNav();renderPage();
@@ -2511,6 +2510,24 @@ window.initApp = async function(){
     }
   }catch(e){
     console.error('Cloud sync failed:', e);
-    // Fallback: ostaje localStorage cache
+  }
+
+  // 3) Real-time pretplata — promene sa drugih uređaja stižu odmah
+  if(typeof window.dbSubscribe==='function'){
+    window.dbSubscribe(function(remoteState){
+      // Sačuvaj koji modal je otvoren da ga ne uništimo
+      var openModal = document.querySelector('.mbg.on');
+      var modalId = openModal ? openModal.id : null;
+      applyState(remoteState);
+      try{localStorage.setItem('pt_state',JSON.stringify(getState()));}catch(e){}
+      theme();renderNav();renderPage();
+      setTimeout(buildGrpFilter,50);
+      // Vrati otvoreni modal
+      if(modalId){
+        var m = document.getElementById(modalId);
+        if(m)m.classList.add('on');
+      }
+      try{toast('🔄 Sinhronizovano sa drugog uređaja');}catch(e){}
+    });
   }
 };

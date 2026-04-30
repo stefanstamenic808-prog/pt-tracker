@@ -50,6 +50,42 @@
     },800);
   };
 
+  // Pretplata na promene sa drugih uređaja
+  var realtimeChannel = null;
+  window.dbSubscribe = function(onRemoteUpdate){
+    if(!window.currentUser)return;
+    if(realtimeChannel){
+      try{sb.removeChannel(realtimeChannel);}catch(e){}
+      realtimeChannel = null;
+    }
+    realtimeChannel = sb
+      .channel('user_data_'+window.currentUser.id)
+      .on('postgres_changes',{
+        event:'*', // INSERT i UPDATE
+        schema:'public',
+        table:'user_data',
+        filter:'user_id=eq.'+window.currentUser.id
+      },function(payload){
+        try{
+          var newData = payload.new && payload.new.data;
+          if(!newData)return;
+          var newSerialized = JSON.stringify(newData);
+          // Ignoriraj ako je odjek sopstvenog push-a
+          if(newSerialized === lastPushedSerialized)return;
+          lastPushedSerialized = newSerialized;
+          if(typeof onRemoteUpdate==='function')onRemoteUpdate(newData);
+        }catch(e){console.error('Realtime handler error:', e);}
+      })
+      .subscribe();
+  };
+
+  window.dbUnsubscribe = function(){
+    if(realtimeChannel){
+      try{sb.removeChannel(realtimeChannel);}catch(e){}
+      realtimeChannel = null;
+    }
+  };
+
   // Force odmah (npr. pre logout)
   window.dbPushNow = async function(state){
     if(!window.currentUser)return false;

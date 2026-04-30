@@ -85,6 +85,8 @@
         await window.dbPushNow(window.getState());
       }
     }catch(e){console.error('Final push before logout failed:', e);}
+    // Otkaži real-time pretplatu
+    try{if(typeof window.dbUnsubscribe==='function')window.dbUnsubscribe();}catch(e){}
     // Sign out
     await sb.auth.signOut();
     // Briši localStorage cache da sledeći user kreće čisto
