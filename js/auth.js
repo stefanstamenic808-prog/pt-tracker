@@ -79,8 +79,17 @@
 
   // Logout
   window.signOut = async function(){
+    // Push poslednje izmene pre odjave
+    try{
+      if(typeof window.dbPushNow==='function'&&typeof window.getState==='function'){
+        await window.dbPushNow(window.getState());
+      }
+    }catch(e){console.error('Final push before logout failed:', e);}
+    // Sign out
     await sb.auth.signOut();
-    // localStorage data ostaje — može biti za drugog korisnika u ovoj fazi
+    // Briši localStorage cache da sledeći user kreće čisto
+    var keys=['pt_state','pt_pkgs','pt_clients','pt_sessions','pt_groups','pt_slots','pt_dark','pt_lang','pt_watpl','pt_tname'];
+    keys.forEach(function(k){try{localStorage.removeItem(k);}catch(e){}});
     window.location.reload();
   };
 

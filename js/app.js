@@ -330,8 +330,36 @@ function t(k){return (TR[lang]&&TR[lang][k])||TR.sr[k]||k;}
 function getDays(){return lang==='en'?DAYS_EN:lang==='ru'?DAYS_RU:DAYS_SR;}
 
 // // --- PERSIST ----------------------------------------------
+window.getState = function(){
+  return {
+    pkgs:pkgs,clients:clients,sessions:sessions,groups:groups,slots:slots,
+    settings:{
+      isDark:isDark,lang:lang,
+      trainerName:localStorage.getItem('pt_tname')||'StamenicFitt',
+      waTpl:localStorage.getItem('pt_watpl')||''
+    }
+  };
+};
+function getState(){return window.getState();}
+function applyState(s){
+  if(!s)return;
+  pkgs=s.pkgs||[];clients=s.clients||[];sessions=s.sessions||[];
+  groups=s.groups||[];slots=s.slots||[];
+  if(s.settings){
+    isDark=!!s.settings.isDark;
+    if(s.settings.lang)lang=s.settings.lang;
+    if(s.settings.trainerName)localStorage.setItem('pt_tname',s.settings.trainerName);
+    if(s.settings.waTpl!==undefined&&s.settings.waTpl!=='')localStorage.setItem('pt_watpl',s.settings.waTpl);
+  }
+}
 function sv(){
   try{
+    var wa=document.getElementById('watpl');
+    if(wa)localStorage.setItem('pt_watpl',wa.value);
+    var st=getState();
+    localStorage.setItem('pt_state',JSON.stringify(st));
+    if(typeof window.dbPush==='function')window.dbPush(st);
+    // legacy keys (backward compat)
     localStorage.setItem('pt_pkgs',JSON.stringify(pkgs));
     localStorage.setItem('pt_clients',JSON.stringify(clients));
     localStorage.setItem('pt_sessions',JSON.stringify(sessions));
@@ -339,11 +367,15 @@ function sv(){
     localStorage.setItem('pt_slots',JSON.stringify(slots));
     localStorage.setItem('pt_dark',isDark?'1':'0');
     localStorage.setItem('pt_lang',lang);
-    var wa=document.getElementById('watpl');
-    if(wa)localStorage.setItem('pt_watpl',wa.value);
   }catch(e){}
 }
 function ld(){
+  // 1) Pokušaj unified pt_state ključ
+  try{
+    var blob=localStorage.getItem('pt_state');
+    if(blob){applyState(JSON.parse(blob));return;}
+  }catch(e){}
+  // 2) Fallback na stare ključeve
   try{
     var a=localStorage.getItem('pt_pkgs'),b=localStorage.getItem('pt_clients'),
         c=localStorage.getItem('pt_sessions'),g=localStorage.getItem('pt_groups'),
@@ -2432,25 +2464,7 @@ function togDark(){isDark=!isDark;sv();theme();renderPage();}
 function reqNotif(){if(!('Notification' in window)){toast(t('notifNo'));return;}Notification.requestPermission().then(function(p){toast(p==='granted'?t('notifOn'):t('notifOff'));});}
 function clearAll(){if(!confirm(t('confirmAll')))return;clients=[];sessions=[];pkgs=[];groups=[];slots=[];sv();renderPage();toast(t('allCleared'));}
 
-// // --- DEMO DATA --------------------------------------------
-if(!pkgs.length&&!clients.length){
-  pkgs=[{id:1,s:8,p:60,n:'Starter',t:'p'},{id:2,s:12,p:80,n:'Standard',t:'s'},{id:3,s:16,p:100,n:'Premium',t:'g'}];
-  clients=[
-    {id:1,name:'Marko Jovanović',pid:3,pstart:'2026-04-01',pused:7,st:'active',rat:null,rn:'',arch:false,note:''},
-    {id:2,name:'Jelena Nikolić',pid:2,pstart:'2026-04-10',pused:3,st:'due',rat:null,rn:'',arch:false,note:''},
-    {id:3,name:'Stefan Petrović',pid:1,pstart:'2026-03-28',pused:6,st:'active',rat:null,rn:'',arch:false,note:''},
-    {id:4,name:'Milica Savić',pid:2,pstart:'2026-04-05',pused:2,st:'active',rat:null,rn:'',arch:false,note:''}
-  ];
-  sessions=[
-    {id:1,cid:1,date:'2026-04-03',time:'10:00',dur:60,type:'Snaga',note:''},
-    {id:2,cid:2,date:'2026-04-05',time:'09:30',dur:45,type:'Kardio',note:''},
-    {id:3,cid:1,date:'2026-04-08',time:'11:00',dur:60,type:'HIIT',note:''},
-    {id:4,cid:3,date:'2026-03-10',time:'08:00',dur:60,type:'Snaga',note:''},
-    {id:5,cid:2,date:'2026-02-07',time:'10:00',dur:45,type:'Kardio',note:''},
-    {id:6,cid:1,date:'2026-02-14',time:'09:00',dur:60,type:'Snaga',note:''},
-    {id:7,cid:1,date:'2025-12-05',time:'09:00',dur:60,type:'HIIT',note:''}
-  ];
-}
+// Demo data uklonjen — svaki novi nalog kreće od praznog stanja.
 
 // Close modals on background click
 ['mC','mRen','mPkg','mLog','mGrp','mSlot','mWA','mProf'].forEach(function(id){
@@ -2471,9 +2485,32 @@ window.delTestNow=function(cid,idx){
 
 // // --- INIT -------------------------------------------------
 // Bootstrap se pokreće iz auth.js nakon uspešne prijave
-window.initApp = function(){
+window.initApp = async function(){
+  // 1) Render odmah iz localStorage cache-a (instant UI)
   theme();
   renderNav();
   renderPage();
   setTimeout(buildGrpFilter,50);
+
+  // 2) Povuci sveže podatke iz cloud-a u pozadini
+  try{
+    if(typeof window.dbPull==='function'){
+      var cloudData = await window.dbPull();
+      if(cloudData){
+        applyState(cloudData);
+        try{localStorage.setItem('pt_state',JSON.stringify(getState()));}catch(e){}
+        theme();renderNav();renderPage();
+        setTimeout(buildGrpFilter,50);
+      } else {
+        // Prvi login — nema podataka u cloud-u, čistimo lokalni cache
+        // (može biti stari demo data od pre auth-a)
+        pkgs=[];clients=[];sessions=[];groups=[];slots=[];
+        sv();
+        renderNav();renderPage();
+      }
+    }
+  }catch(e){
+    console.error('Cloud sync failed:', e);
+    // Fallback: ostaje localStorage cache
+  }
 };
