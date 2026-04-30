@@ -51,6 +51,7 @@ var TR={
     notifLabel:'Notifikacije',notifSub:'Upozorenje kad paket ističe',enable:'Uključi',
     clearData:'Obriši sve podatke',clearSub:'Briše sve klijente i treninge',del:'Obriši',
     version:'StamenicFitt Tracker v4.0',verSub:'Podaci sačuvani lokalno na telefonu',
+    signedInAs:'Prijavljen kao',signOutBtn:'Odjavi se',
     saved:'Sačuvano!',groupSaved:'Grupa sačuvana!',groupDel:'Grupa obrisana.',clientRemoved:'Klijent uklonjen iz grupe.',
     pkgSaved:'Paket sačuvan!',pkgDel:'Paket obrisan.',pkgActive:'Paket je aktivan!',
     clientAdded:'Klijent dodat! ✓',clientEdited:'Izmenjeno!',clientArch:'Klijent arhiviran 📦',clientAct:'Klijent aktiviran ✓',clientDel:'Obrisan.',
@@ -155,6 +156,7 @@ TR.en={
   notifLabel:'Notifications',notifSub:'Alert when package expires',enable:'Enable',
   clearData:'Clear all data',clearSub:'Deletes all clients and sessions',del:'Delete',
   version:'StamenicFitt Tracker v4.0',verSub:'Data saved locally on device',
+  signedInAs:'Signed in as',signOutBtn:'Sign out',
   saved:'Saved!',groupSaved:'Group saved!',groupDel:'Group deleted.',clientRemoved:'Client removed from group.',
   pkgSaved:'Package saved!',pkgDel:'Deleted.',pkgActive:'Package is active!',
   clientAdded:'Client added! ✓',clientEdited:'Updated!',clientArch:'Client archived 📦',clientAct:'Client activated ✓',clientDel:'Deleted.',
@@ -256,6 +258,7 @@ TR.ru={
   notifLabel:'Уведомления',notifSub:'Оповещение когда пакет истекает',enable:'Включить',
   clearData:'Удалить все данные',clearSub:'Удаляет всех клиентов и тренировки',del:'Удалить',
   version:'StamenicFitt Tracker v4.0',verSub:'Данные сохранены локально',
+  signedInAs:'Вы вошли как',signOutBtn:'Выйти',
   saved:'Сохранено!',groupSaved:'Группа сохранена!',groupDel:'Группа удалена.',clientRemoved:'Клиент удалён из группы.',
   pkgSaved:'Пакет сохранён!',pkgDel:'Удалено.',pkgActive:'Пакет активен!',
   clientAdded:'Клиент добавлен! ✓',clientEdited:'Изменено!',clientArch:'Клиент архивирован 📦',clientAct:'Клиент активирован ✓',clientDel:'Удалено.',
@@ -2421,6 +2424,7 @@ function pgSettings(){
     '<div class="setrow"><div><div class="setlbl">'+t('waTplLabel')+'</div><div class="setsub">'+t('waTplSub')+'</div></div><button class="btn btnsm" onclick="openWAM()">'+t('edit')+'</button></div>'+
     '<div class="setrow"><div><div class="setlbl">'+t('notifLabel')+'</div><div class="setsub">'+t('notifSub')+'</div></div><button class="btn btnsm" onclick="reqNotif()">'+t('enable')+'</button></div>'+
     '<div class="setrow"><div><div class="setlbl">'+t('clearData')+'</div><div class="setsub">'+t('clearSub')+'</div></div><button class="btn btnsm btnr" onclick="clearAll()">'+t('del')+'</button></div>'+
+    (window.currentUser?'<div class="setrow"><div><div class="setlbl">'+t('signedInAs')+'</div><div class="setsub">'+(window.currentUser.email||'')+'</div></div><button class="btn btnsm btnr" onclick="signOut()">'+t('signOutBtn')+'</button></div>':'')+
     '<div class="setrow"><div><div class="setlbl">'+t('version')+'</div><div class="setsub">'+t('verSub')+'</div></div></div>';
 }
 function setLang(l){lang=l;sv();renderNav();renderPage();}
@@ -2466,5 +2470,10 @@ window.delTestNow=function(cid,idx){
 };
 
 // // --- INIT -------------------------------------------------
-theme();renderNav();renderPage();
-setTimeout(buildGrpFilter,50);
+// Bootstrap se pokreće iz auth.js nakon uspešne prijave
+window.initApp = function(){
+  theme();
+  renderNav();
+  renderPage();
+  setTimeout(buildGrpFilter,50);
+};

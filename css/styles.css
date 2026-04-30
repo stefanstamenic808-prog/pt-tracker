@@ -321,3 +321,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .dark .toast{background:var(--red)}
 .empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:14px}
+/* LOGIN SCREEN */
+.login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;z-index:10}
+.login-card{width:100%;max-width:380px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px 22px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.login-logo-icon{width:36px;height:36px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:900;letter-spacing:.5px}
+.dark .login-logo-icon{background:var(--red)}
+.login-logo-text{font-size:18px;font-weight:900;color:var(--text);letter-spacing:.5px}
+.login-logo-text span{color:var(--red)}
+.login-tagline{font-size:13px;color:var(--text3);margin-bottom:20px}
+.login-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:11px 14px;border-radius:var(--rs);border:1px solid var(--border2);background:var(--bg);color:var(--text);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.login-btn:active{opacity:.65}
+.login-btn-google{background:#fff;color:#3c4043;border-color:#dadce0}
+.dark .login-btn-google{background:#fff;color:#3c4043}
+.login-divider{display:flex;align-items:center;gap:10px;margin:18px 0 14px;color:var(--text3);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.login-field{margin-bottom:10px}
+.login-field label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:4px}
+.login-field input{width:100%;padding:10px 12px;font-size:14px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);color:var(--text);font-family:inherit;-webkit-appearance:none}
+.login-error{font-size:12px;color:var(--red);min-height:18px;margin:6px 0;font-weight:500}
+.login-actions{display:flex;gap:8px;margin-top:8px}
+.login-actions .btn{flex:1;padding:11px 8px;font-size:14px}
+.login-foot{font-size:11px;color:var(--text3);text-align:center;margin-top:18px;line-height:1.5}
