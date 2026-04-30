@@ -34,7 +34,7 @@ var TR={
     noGroups:'Nema grupa. Napravi prvu!',
     noArchived:'Nema arhiviranih klijenata.',
     archDesc:'Arhivirani klijenti su sačuvani. Možeš ih aktivirati u bilo kom trenutku.',
-    expiringSoon:'⚠️ Paketi ističu uskoro',completedPkgs:'✅ Iskorišćeni paketi',
+    expiringSoon:'⚠️ Paketi ističu uskoro',completedPkgs:'✅ Iskorišćeni paketi',expiredTitle:'❌ Istekla članarina',
     thisWeek:'Danas',prevWeek:'← Prethodna',nextWeek:'Sledeća →',
     addSlot:'Dodaj termin',editSlot:'Izmeni termin',slotSaved:'Termin sačuvan!',slotDeleted:'Termin obrisan.',
     noSlotClient:'Izaberi klijenta!',confirmSlot:'Obrisati termin?',
@@ -138,7 +138,7 @@ TR.en={
   noGroups:'No groups. Create first!',
   noArchived:'No archived clients.',
   archDesc:'Archived clients are saved. Activate them at any time.',
-  expiringSoon:'⚠️ Packages expiring soon',completedPkgs:'✅ Completed packages',
+  expiringSoon:'⚠️ Packages expiring soon',completedPkgs:'✅ Completed packages',expiredTitle:'❌ Expired memberships',
   thisWeek:'Today',prevWeek:'← Previous',nextWeek:'Next →',
   addSlot:'Add session',editSlot:'Edit session',slotSaved:'Session saved!',slotDeleted:'Session deleted.',
   noSlotClient:'Select client!',confirmSlot:'Delete this session?',
@@ -239,7 +239,7 @@ TR.ru={
   noGroups:'Нет групп. Создайте первую!',
   noArchived:'Нет архивированных клиентов.',
   archDesc:'Архивированные клиенты сохранены. Активируйте в любое время.',
-  expiringSoon:'⚠️ Пакеты скоро истекают',completedPkgs:'✅ Использованные пакеты',
+  expiringSoon:'⚠️ Пакеты скоро истекают',completedPkgs:'✅ Использованные пакеты',expiredTitle:'❌ Истекшие членства',
   thisWeek:'Сегодня',prevWeek:'← Пред.',nextWeek:'След. →',
   addSlot:'Добавить',editSlot:'Изменить',slotSaved:'Сохранено!',slotDeleted:'Удалено.',
   noSlotClient:'Выберите клиента!',confirmSlot:'Удалить сеанс?',
@@ -376,6 +376,30 @@ function ini(n){return n.split(' ').map(function(w){return w[0];}).join('').toUp
 function fmtD(d){if(!d)return '—';var a=d.split('-');return a[2]+'/'+a[1]+'/'+a[0];}
 function bc(s){return{active:'ba',due:'bd',overdue:'bo',paused:'bp'}[s]||'bp';}
 function bl(s){return{active:t('statusActive'),due:t('statusDue'),overdue:t('statusOverdue'),paused:t('statusPaused')}[s]||s;}
+
+// "Istekla pre X dana" — formatirano po jeziku
+function expFmt(n){
+  if(lang==='en')return 'Expired '+n+' day'+(n!==1?'s':'')+' ago';
+  if(lang==='ru')return 'Истекла '+n+' дн. назад';
+  return 'Istekla pre '+n+' dan'+(n===1?'':n%10>=2&&n%10<=4&&(n<10||n>20)?'a':'a');
+}
+
+// Auto-update statusa za istekle članarine
+// active → due (1-14 dana isteka), due → overdue (>14 dana isteka)
+// paused i overdue ostaju kao što jesu
+function autoUpdateExpiredStatuses(){
+  var changed=false;
+  clients.forEach(function(c){
+    if(c.arch||c.st==='paused'||!c.pid)return;
+    var e=pkgExp(c);if(!e)return;
+    var dl=du(e);
+    if(dl>=0)return; // još nije istekla
+    var daysOver=Math.abs(dl);
+    if(c.st==='active'&&daysOver>=1){c.st='due';changed=true;}
+    else if(c.st==='due'&&daysOver>=15){c.st='overdue';changed=true;}
+  });
+  if(changed)sv();
+}
 function cCol(cid){var C=['#cc2200','#1a56db','#1a7a2e','#9333ea','#059669','#d97706','#0891b2','#be185d'];return C[cid%C.length];}
 function toast(m){var el=document.getElementById('toast');el.textContent=m;el.classList.add('on');setTimeout(function(){el.classList.remove('on');},2400);}
 function om(id){document.getElementById(id).classList.add('on');}
@@ -441,12 +465,15 @@ function selRS(s){
 
 // // --- CLIENTS PAGE -----------------------------------------
 function pgClients(){
+  autoUpdateExpiredStatuses();
   var ac=clients.filter(function(c){return !c.arch;});
+  var expired=ac.filter(function(c){var e=pkgExp(c);return e&&c.st!=='paused'&&du(e)<0;});
   var expiring=ac.filter(function(c){var e=pkgExp(c);return e&&c.st!=='paused'&&du(e)>=0&&du(e)<=7;});
   var completed=ac.filter(function(c){var p=c.pid?pgb(c.pid):null;return p&&(c.pused||0)>=p.s&&c.st!=='paused';});
   var td=sessions.filter(function(s){return s.date===today();}).length;
   var arc=clients.filter(function(c){return c.arch;}).length;
 
+  var notifExpired=expired.length ? buildNotif(expired,'expired') : '';
   var notifExp=expiring.length ? buildNotif(expiring,false) : '';
   var notifDone=completed.length ? buildNotif(completed,true) : '';
 
@@ -460,7 +487,7 @@ function pgClients(){
     return g&&g.members&&g.members.indexOf(c.id)>-1;
   }) : ac;
 
-  return notifExp+notifDone+
+  return notifExpired+notifExp+notifDone+
     '<div class="topbar"><div class="ptitle">'+t('clients')+'</div><button class="btn btnp" onclick="openCM()">+ Novi</button></div>'+
     '<div class="sgrid" style="grid-template-columns:1fr 1fr">'+
       '<div class="sc"><div class="sl">'+t('active')+'</div><div class="sv">'+ac.length+'</div></div>'+
@@ -472,12 +499,16 @@ function pgClients(){
     (arc?'<div style="text-align:center;margin-top:14px"><button class="btn btnsm" onclick="setTab(\'arhiva\')">📦 '+t('archive')+' ('+arc+')</button></div>':'');
 }
 
-function buildNotif(list,isDone){
-  var col=isDone?'green':'';
-  var title=isDone?t('completedPkgs'):t('expiringSoon');
+function buildNotif(list,mode){
+  // mode: 'expired' (red), true (green/done), false (default amber)
+  var col=mode==='expired'?'red':mode===true?'green':'';
+  var title=mode==='expired'?t('expiredTitle'):mode===true?t('completedPkgs'):t('expiringSoon');
   var items=list.map(function(c){
     var d=pkgExp(c)?du(pkgExp(c)):0;
-    var when=isDone?t('completedJust'):(d===0?t('today2'):d===1?t('tomorrow'):t('inDays')+d+t('days'));
+    var when;
+    if(mode==='expired'){when=expFmt(Math.abs(d));}
+    else if(mode===true){when=t('completedJust');}
+    else{when=d===0?t('today2'):d===1?t('tomorrow'):t('inDays')+d+t('days');}
     return '<div class="nitem '+col+'">'+c.name+' — '+when+'</div>';
   }).join('');
   return '<div class="notif on '+col+'"><div class="ntitle '+col+'">'+title+'</div>'+items+'</div>';
@@ -493,11 +524,13 @@ function renderCards(list){
     var isDone=total>0&&used>=total;
     var chk=sessions.some(function(s){return s.cid===c.id&&s.date===today();});
     var ts=sessions.find(function(s){return s.cid===c.id&&s.date===today();});
+    var isExpired=!isDone&&dl!==null&&dl<0&&c.st!=='paused';
     var warn=(!isDone&&dl!==null&&dl>=0&&dl<=7&&c.st!=='paused')?(dl===0?t('expToday'):dl===1?t('expTomorrow'):t('expDays')+dl+t('days')):'';
+    var expiredText=isExpired?'❌ '+expFmt(Math.abs(dl)):'';
     var renewed=c.rat&&du(c.rat)>=-3&&du(c.rat)<=0;
     var cgs=groups.filter(function(g){return g.members&&g.members.indexOf(c.id)>-1;});
 
-    var cls='cc'+(chk?' trained':'')+(isDone?' completed':warn?' expiring':'');
+    var cls='cc'+(chk?' trained':'')+(isDone?' completed':isExpired?' expired':warn?' expiring':'');
 
     // Boja progress bara: zelena → narandžasta → crvena prema iskoristećenosti / blizini isteka
     var barColor='var(--green)';
@@ -528,7 +561,7 @@ function renderCards(list){
             cgs.map(function(g){return '<span class="grpchip" style="background:'+g.color+'22;color:'+g.color+';border-color:'+g.color+'44">'+g.name+'</span>';}).join('')+
           '</div>'+
           (ts?'<div class="cstamp">'+t('trainedAt')+ts.time+'</div>':'')+
-          (isDone?'<div class="cdone">'+t('doneMsg')+'</div>':warn?'<div class="cwarn">'+warn+'</div>':
+          (isDone?'<div class="cdone">'+t('doneMsg')+'</div>':isExpired?'<div class="cexp">'+expiredText+'</div>':warn?'<div class="cwarn">'+warn+'</div>':
             (p&&total>0?'<div style="font-size:11px;color:var(--text3);margin-top:2px">'+used+t('sessUsed')+total+t('sessLabel')+'</div>':''))+
           (renewed?'<div class="crenew">'+t('renewed')+fmtD(c.rat)+(c.rn?' · '+c.rn:'')+'</div>':'')+
         '</div>'+
