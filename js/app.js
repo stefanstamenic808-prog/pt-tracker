@@ -818,10 +818,40 @@ function switchTestTab(tabId,cid){
 }
 
 // // --- CLIENT TESTING ----------------------------------------
+var editingIsoIdx=null; // {cid,idx} kad se izmena testa
+
 function getTests(cid){
   var c=cob(cid);
   return (c&&c.isoTests)?c.isoTests:[];
 }
+
+window.editIsoTest=function(cid,idx){
+  editingIsoIdx={cid:cid,idx:idx};
+  openProf(cid);
+  setTimeout(function(){
+    switchProfTab('tests',cid);switchTestTab('iso',cid);
+    var tests=getTests(cid),te=tests[idx];
+    if(!te)return;
+    ISO_EXERCISES.forEach(function(ex){
+      var d=te.data&&te.data[ex.key];
+      var e1=document.getElementById('iso_'+ex.key+'_1');
+      var e2=document.getElementById('iso_'+ex.key+'_2');
+      var e3=document.getElementById('iso_'+ex.key+'_3');
+      if(e1)e1.value=d&&d.v1?d.v1:'';
+      if(e2)e2.value=d&&d.v2?d.v2:'';
+      if(e3)e3.value=d&&d.v3?d.v3:'';
+    });
+    var dEl=document.getElementById('iso_date');if(dEl)dEl.value=te.date||today();
+    var nEl=document.getElementById('iso_note');if(nEl)nEl.value=te.note||'';
+    if(dEl)dEl.scrollIntoView({behavior:'smooth',block:'center'});
+  },120);
+};
+
+window.cancelIsoEdit=function(cid){
+  editingIsoIdx=null;
+  openProf(cid);
+  setTimeout(function(){switchProfTab('tests',cid);switchTestTab('iso',cid);},50);
+};
 
 var ISO_EXERCISES=[
   {key:'vp',name:'Vertical Pull',icon:'🔼',sides:false},
@@ -942,7 +972,10 @@ function buildTestSection(cid){
           '<div><div style="font-size:14px;font-weight:700;color:var(--text)">'+fmtD(te.date)+'</div>'+
           (te.note?'<div style="font-size:11px;color:var(--text3);margin-top:2px">'+te.note+'</div>':'')+
           '</div>'+
-          '<button class="btn btnsm btnr" style="padding:3px 8px;font-size:11px" onclick="window.delTestNow('+cid+','+realIdx+');event.stopPropagation();">×</button>'+
+          '<div style="display:flex;gap:6px">'+
+            '<button class="btn btnsm" style="padding:3px 8px;font-size:11px" onclick="window.editIsoTest('+cid+','+realIdx+');event.stopPropagation();">✏️ Izmeni</button>'+
+            '<button class="btn btnsm btnr" style="padding:3px 8px;font-size:11px" onclick="window.delTestNow('+cid+','+realIdx+');event.stopPropagation();">×</button>'+
+          '</div>'+
         '</div>'+
         resultsTable+
         disbalanceSection+
@@ -960,7 +993,15 @@ function buildTestSection(cid){
       '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📅 Datum</div><input id="iso_date" type="date" value="'+today()+'" style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none"/></div>'+
       '<div style="flex:1"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 Napomena</div><input id="iso_note" placeholder="opciono..." style="width:100%;padding:8px;font-size:13px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit"/></div>'+
     '</div>'+
-    '<button class="btn btnp btnsm" style="width:100%;padding:10px;margin-top:6px" onclick="addTest('+cid+')">'+t('addTest')+'</button>'+
+    (editingIsoIdx&&editingIsoIdx.cid===cid?
+      '<div style="background:var(--abg);border:1px solid var(--amber);border-radius:var(--rs);padding:8px 12px;margin-top:6px;font-size:12px;color:var(--amber);font-weight:600;text-align:center">✏️ Izmena testa od '+(getTests(cid)[editingIsoIdx.idx]?fmtD(getTests(cid)[editingIsoIdx.idx].date):'')+'</div>'+
+      '<div style="display:flex;gap:6px;margin-top:6px">'+
+        '<button class="btn btnsm" style="flex:1;padding:10px" onclick="window.cancelIsoEdit('+cid+')">Otkaži</button>'+
+        '<button class="btn btnp btnsm" style="flex:2;padding:10px" onclick="addTest('+cid+')">✓ Sačuvaj izmene</button>'+
+      '</div>'
+    :
+      '<button class="btn btnp btnsm" style="width:100%;padding:10px;margin-top:6px" onclick="addTest('+cid+')">'+t('addTest')+'</button>'
+    )+
     '<div style="font-size:13px;font-weight:700;color:var(--text2);margin:16px 0 10px">'+t('testHistory')+'</div>'+
     history+
   '</div>';
@@ -986,11 +1027,17 @@ function addTest(cid){
   if(!hasVal){toast(t('enterTest'));return;}
   var date=document.getElementById('iso_date').value||today();
   var note=(document.getElementById('iso_note').value||'').trim();
-  clients[i].isoTests.push({date:date,data:data,note:note});
+  var isEditing=editingIsoIdx&&editingIsoIdx.cid===cid&&clients[i].isoTests[editingIsoIdx.idx];
+  if(isEditing){
+    clients[i].isoTests[editingIsoIdx.idx]={date:date,data:data,note:note};
+    editingIsoIdx=null;
+  } else {
+    clients[i].isoTests.push({date:date,data:data,note:note});
+  }
   sv();
   openProf(cid);
   setTimeout(function(){switchProfTab('tests',cid);switchTestTab('iso',cid);},50);
-  toast(t('testSaved'));
+  toast(isEditing?'Izmene sačuvane! ✏️':t('testSaved'));
 }
 
 function delTest(cid,idx){
