@@ -52,6 +52,7 @@ var TR={
     clearData:'Obriši sve podatke',clearSub:'Briše sve klijente i treninge',del:'Obriši',
     version:'StamenicFitt Tracker v4.0',verSub:'Podaci sačuvani lokalno na telefonu',
     signedInAs:'Prijavljen kao',signOutBtn:'Odjavi se',
+    trainingLogged:'Trening unesen!',emptyText:'Upiši tekst!',syncedFromDevice:'🔄 Sinhronizovano sa drugog uređaja',
     saved:'Sačuvano!',groupSaved:'Grupa sačuvana!',groupDel:'Grupa obrisana.',clientRemoved:'Klijent uklonjen iz grupe.',
     pkgSaved:'Paket sačuvan!',pkgDel:'Paket obrisan.',pkgActive:'Paket je aktivan!',
     clientAdded:'Klijent dodat! ✓',clientEdited:'Izmenjeno!',clientArch:'Klijent arhiviran 📦',clientAct:'Klijent aktiviran ✓',clientDel:'Obrisan.',
@@ -59,7 +60,7 @@ var TR={
     tplSaved:'Šablon sačuvan!',
     enterName:'Unesi ime!',enterPkg:'Izaberi paket!',enterDate:'Izaberi datum!',enterSessions:'Unesi broj treninga i cenu!',
     notifOn:'Notifikacije uključene!',notifOff:'Odbijena.',notifNo:'Nije podržano.',
-    confirmDel:'Trajno obrisati?',confirmPkg:'Obrisati paket?',confirmAll:'Obrisati SVE podatke?',allCleared:'Obrisano.',
+    confirmDel:'Trajno obrisati?',confirmPkg:'Obrisati paket?',confirmAll:'Obrisati SVE podatke?',allCleared:'Obrisano.',confirmTest:'Obrisati ovo testiranje?',
     allClients:'Svi klijenti',trainedTotal:' treninga ukupno',
     notesSaved:'Beleška sačuvana! 📝',lastSession:'Poslednji trening',nextSlot:'Sledeći termin',
     testing:'Izometrija Testiranje',addTest:'+ Sačuvaj testiranje',testHistory:'Istorija testiranja',noTests:'Nema testiranja. Dodaj prvo!',
@@ -157,6 +158,7 @@ TR.en={
   clearData:'Clear all data',clearSub:'Deletes all clients and sessions',del:'Delete',
   version:'StamenicFitt Tracker v4.0',verSub:'Data saved locally on device',
   signedInAs:'Signed in as',signOutBtn:'Sign out',
+  trainingLogged:'Session logged!',emptyText:'Enter text!',syncedFromDevice:'🔄 Synced from another device',
   saved:'Saved!',groupSaved:'Group saved!',groupDel:'Group deleted.',clientRemoved:'Client removed from group.',
   pkgSaved:'Package saved!',pkgDel:'Deleted.',pkgActive:'Package is active!',
   clientAdded:'Client added! ✓',clientEdited:'Updated!',clientArch:'Client archived 📦',clientAct:'Client activated ✓',clientDel:'Deleted.',
@@ -164,7 +166,7 @@ TR.en={
   tplSaved:'Template saved!',
   enterName:'Enter name!',enterPkg:'Select package!',enterDate:'Select date!',enterSessions:'Enter sessions and price!',
   notifOn:'Notifications enabled!',notifOff:'Denied.',notifNo:'Not supported.',
-  confirmDel:'Delete permanently?',confirmPkg:'Delete package?',confirmAll:'Delete ALL data?',allCleared:'Cleared.',
+  confirmDel:'Delete permanently?',confirmPkg:'Delete package?',confirmAll:'Delete ALL data?',allCleared:'Cleared.',confirmTest:'Delete this test?',
   allClients:'All clients',trainedTotal:' sessions total',
   notesSaved:'Note saved! 📝',lastSession:'Last session',nextSlot:'Next appointment',
   testing:'Isometric Testing',addTest:'+ Save test',testHistory:'Test history',noTests:'No tests. Add first!',
@@ -259,6 +261,7 @@ TR.ru={
   clearData:'Удалить все данные',clearSub:'Удаляет всех клиентов и тренировки',del:'Удалить',
   version:'StamenicFitt Tracker v4.0',verSub:'Данные сохранены локально',
   signedInAs:'Вы вошли как',signOutBtn:'Выйти',
+  trainingLogged:'Тренировка добавлена!',emptyText:'Введите текст!',syncedFromDevice:'🔄 Синхронизировано с другого устройства',
   saved:'Сохранено!',groupSaved:'Группа сохранена!',groupDel:'Группа удалена.',clientRemoved:'Клиент удалён из группы.',
   pkgSaved:'Пакет сохранён!',pkgDel:'Удалено.',pkgActive:'Пакет активен!',
   clientAdded:'Клиент добавлен! ✓',clientEdited:'Изменено!',clientArch:'Клиент архивирован 📦',clientAct:'Клиент активирован ✓',clientDel:'Удалено.',
@@ -266,7 +269,7 @@ TR.ru={
   tplSaved:'Шаблон сохранён!',
   enterName:'Введите имя!',enterPkg:'Выберите пакет!',enterDate:'Выберите дату!',enterSessions:'Введите тренировки и цену!',
   notifOn:'Уведомления включены!',notifOff:'Отказано.',notifNo:'Не поддерживается.',
-  confirmDel:'Удалить навсегда?',confirmPkg:'Удалить пакет?',confirmAll:'Удалить ВСЕ данные?',allCleared:'Очищено.',
+  confirmDel:'Удалить навсегда?',confirmPkg:'Удалить пакет?',confirmAll:'Удалить ВСЕ данные?',allCleared:'Очищено.',confirmTest:'Удалить этот тест?',
   allClients:'Все клиенты',trainedTotal:' тренировок всего',
   notesSaved:'Заметка сохранена! 📝',lastSession:'Последняя тренировка',nextSlot:'Следующая встреча',
   testing:'Изометрическое тестирование',addTest:'+ Сохранить тест',testHistory:'История тестов',noTests:'Нет тестов. Добавьте первый!',
@@ -696,7 +699,12 @@ function togTrain(cid){
 // // --- ARCHIVE ----------------------------------------------
 function archC(id){var i=clients.findIndex(function(c){return c.id===id;});if(i>-1){clients[i].arch=true;sv();renderPage();toast(t('clientArch'));}}
 function actC(id){var i=clients.findIndex(function(c){return c.id===id;});if(i>-1){clients[i].arch=false;sv();renderPage();toast(t('clientAct'));}}
-function delC(id){clients=clients.filter(function(c){return c.id!==id;});sessions=sessions.filter(function(s){return s.cid!==id;});sv();renderPage();toast(t('clientDel'));}
+function delC(id){
+  if(!confirm(t('confirmDel')))return;
+  clients=clients.filter(function(c){return c.id!==id;});
+  sessions=sessions.filter(function(s){return s.cid!==id;});
+  sv();renderPage();toast(t('clientDel'));
+}
 
 // // --- CLIENT MODAL -----------------------------------------
 function buildPkgSel(gid,curId,prefix){
@@ -1193,16 +1201,6 @@ function addTest(cid){
   toast(isEditing?t('isoEditSaved'):t('testSaved'));
 }
 
-function delTest(cid,idx){
-  var i=clients.findIndex(function(c){return c.id===cid;});
-  if(i===-1||!clients[i].isoTests)return;
-  clients[i].isoTests.splice(idx,1);
-  sv();
-  openProf(cid);
-  setTimeout(function(){switchProfTab('tests',cid);switchTestTab('iso',cid);},50);
-  toast(t('testDeleted'));
-}
-
 // // --- FMS TEST -----------------------------------------------
 var FMS_DATA=[
   {key:'deep_squat',icon:'⬇️',nameKey:'fmsDeepSquat',desc:'Bilateralna mobilnost kukova, kolena, skočnih zglobova'},
@@ -1563,6 +1561,7 @@ function addFMSTest(cid){
 }
 
 window.delFMSNow=function(cid,idx){
+  if(!confirm(t('confirmTest')))return;
   var ci=clients.findIndex(function(c){return c.id===cid;});
   if(ci>-1&&clients[ci].fmsTests){
     clients[ci].fmsTests.splice(idx,1);
@@ -1792,6 +1791,7 @@ function addRufTest(cid){
 }
 
 window.delRufNow=function(cid,idx){
+  if(!confirm(t('confirmTest')))return;
   var ci=clients.findIndex(function(c){return c.id===cid;});
   if(ci>-1&&clients[ci].rufTests){
     clients[ci].rufTests.splice(idx,1);
@@ -2068,6 +2068,7 @@ function add1RMTest(cid){
 }
 
 window.del1RMNow=function(cid,idx){
+  if(!confirm(t('confirmTest')))return;
   var ci=clients.findIndex(function(c){return c.id===cid;});
   if(ci>-1&&clients[ci].rmTests){
     clients[ci].rmTests.splice(idx,1);
@@ -2133,6 +2134,7 @@ function savePkg(){
 }
 function delPkg(id){
   if(clients.some(function(c){return c.pid===id;})){toast(t('pkgActive'));return;}
+  if(!confirm(t('confirmPkg')))return;
   pkgs=pkgs.filter(function(p){return p.id!==id;});
   sv();renderPage();toast(t('pkgDel'));
 }
@@ -2303,6 +2305,7 @@ function saveSlot(){
 }
 function delSlot(){
   if(!eSlotId)return;
+  if(!confirm(t('confirmSlot')))return;
   slots=slots.filter(function(s){return s.id!==eSlotId;});
   sv();cm('mSlot');renderPage();toast(t('slotDeleted'));
 }
@@ -2322,7 +2325,7 @@ function saveLog(){
   if(!date){toast(t('enterDate'));return;}
   sessions.push({id:Date.now(),cid:cid,date:date,time:now2().time,dur:Number(document.getElementById('ldur').value)||60,type:document.getElementById('lty').value,note:document.getElementById('lnote').value.trim()});
   var c=cob(cid);if(c)c.pused=(c.pused||0)+1;
-  sv();cm('mLog');renderPage();toast('Trening unesen!');
+  sv();cm('mLog');renderPage();toast(t('trainingLogged'));
 }
 
 // // --- FINANSIJE PAGE ---------------------------------------
@@ -2416,7 +2419,13 @@ function copyWA(btn,enc){
   else toast(t('copied'));
 }
 function openWAM(){document.getElementById('watpl').value=getWaTpl();om('mWA');}
-function saveWaTpl(){var v=document.getElementById('watpl').value.trim();if(!v){toast('Upiši tekst!');return;}localStorage.setItem('pt_watpl',v);cm('mWA');renderPage();toast(t('tplSaved'));}
+function saveWaTpl(){
+  var v=document.getElementById('watpl').value.trim();
+  if(!v){toast(t('emptyText'));return;}
+  localStorage.setItem('pt_watpl',v);
+  sv();
+  cm('mWA');renderPage();toast(t('tplSaved'));
+}
 
 // // --- ARHIVA PAGE ------------------------------------------
 function pgArhiva(){
@@ -2452,7 +2461,7 @@ function pgSettings(){
   return '<div class="topbar"><div class="ptitle">'+t('settings')+'</div></div>'+
     '<div class="setrow"><div><div class="setlbl">'+t('langLabel')+'</div></div><div class="langbtns">'+langBtns+'</div></div>'+
     '<div class="setrow"><div><div class="setlbl">'+t('darkMode')+'</div><div class="setsub">'+t('darkSub')+'</div></div><div class="tog'+(isDark?' on':'')+'" onclick="togDark()"><div class="togk"></div></div></div>'+
-    '<div class="setrow"><div><div class="setlbl">'+t('trainerName')+'</div><div class="setsub">'+t('trainerSub')+'</div></div><input value="'+(localStorage.getItem('pt_tname')||'StamenicFitt')+'" onchange="localStorage.setItem(\'pt_tname\',this.value);toast(t(\'saved\'))" style="padding:6px 10px;font-size:14px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;width:140px"/></div>'+
+    '<div class="setrow"><div><div class="setlbl">'+t('trainerName')+'</div><div class="setsub">'+t('trainerSub')+'</div></div><input value="'+(localStorage.getItem('pt_tname')||'StamenicFitt')+'" onchange="localStorage.setItem(\'pt_tname\',this.value);sv();toast(t(\'saved\'))" style="padding:6px 10px;font-size:14px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;width:140px"/></div>'+
     '<div class="setrow"><div><div class="setlbl">'+t('waTplLabel')+'</div><div class="setsub">'+t('waTplSub')+'</div></div><button class="btn btnsm" onclick="openWAM()">'+t('edit')+'</button></div>'+
     '<div class="setrow"><div><div class="setlbl">'+t('notifLabel')+'</div><div class="setsub">'+t('notifSub')+'</div></div><button class="btn btnsm" onclick="reqNotif()">'+t('enable')+'</button></div>'+
     '<div class="setrow"><div><div class="setlbl">'+t('clearData')+'</div><div class="setsub">'+t('clearSub')+'</div></div><button class="btn btnsm btnr" onclick="clearAll()">'+t('del')+'</button></div>'+
@@ -2473,6 +2482,7 @@ function clearAll(){if(!confirm(t('confirmAll')))return;clients=[];sessions=[];p
 
 // Direct function for deleting tests from profile modal
 window.delTestNow=function(cid,idx){
+  if(!confirm(t('confirmTest')))return;
   var ci=clients.findIndex(function(c){return c.id===cid;});
   if(ci>-1&&clients[ci].isoTests){
     clients[ci].isoTests.splice(idx,1);
@@ -2549,7 +2559,7 @@ window.initApp = async function(){
         var m = document.getElementById(modalId);
         if(m)m.classList.add('on');
       }
-      try{toast('🔄 Sinhronizovano sa drugog uređaja');}catch(e){}
+      try{toast(t('syncedFromDevice'));}catch(e){}
     });
   }
 };
