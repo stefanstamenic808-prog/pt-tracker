@@ -1,14 +1,30 @@
 // service-worker.js — offline cache za StamenicFitt
 // Verzioniraj cache name pri svakom deploy-u da se stari fajlovi obrišu
-const CACHE_NAME = 'pt-tracker-v2';
+const CACHE_NAME = 'pt-tracker-v3';
 const ASSETS = [
   './',
   './index.html',
   './css/styles.css',
-  './js/app.js',
-  './js/auth.js',
-  './js/db.js',
   './js/supabase-config.js',
+  './js/db.js',
+  './js/auth.js',
+  './js/state.js',
+  './js/i18n.js',
+  './js/helpers.js',
+  './js/ui.js',
+  './js/clients.js',
+  './js/packages.js',
+  './js/groups.js',
+  './js/schedule.js',
+  './js/finance.js',
+  './js/whatsapp.js',
+  './js/archive.js',
+  './js/settings.js',
+  './js/tests-iso.js',
+  './js/tests-fms.js',
+  './js/tests-ruffier.js',
+  './js/tests-1rm.js',
+  './js/app.js',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 ];
 
