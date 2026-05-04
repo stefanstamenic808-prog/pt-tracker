@@ -192,8 +192,15 @@ function togTrain(cid){
   } else {
     sessions.push({id:Date.now(),cid:cid,date:d.date,time:d.time,dur:60,type:'Kombinirano',note:'Brzi unos'});
     if(c)c.pused=(c.pused||0)+1;
-    // Also add to schedule as auto-slot
-    var roundedTime=pad(Math.min(21,Math.max(6,parseInt(d.time.split(':')[0]))))+':'+( parseInt(d.time.split(':')[1])>=30?'30':'00');
+    // Also add to schedule as auto-slot.
+    // Schedule prikazuje samo pune sate (06:00..21:00) — zaokružujemo
+    // na najbliži pun sat tako da se slot zaista i pojavi u rasporedu.
+    var hh=parseInt(d.time.split(':')[0],10);
+    var mm=parseInt(d.time.split(':')[1],10);
+    if(mm>=30)hh+=1;
+    if(hh<6)hh=6;
+    if(hh>21)hh=21;
+    var roundedTime=pad(hh)+':00';
     slots.push({id:Date.now()+1,cid:cid,date:d.date,time:roundedTime,dur:60,note:'',auto:true});
     var p=c&&c.pid?pgb(c.pid):null;
     var justDone=p&&(c.pused||0)>=p.s;

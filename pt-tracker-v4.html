@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="StamenicFitt"/>
+<meta name="theme-color" content="#111111"/>
+<title>StamenicFitt</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23111'/%3E%3Ctext y='68' x='50' text-anchor='middle' font-size='62' font-family='Arial Black,sans-serif' fill='white' font-weight='900'%3ESF%3C/text%3E%3C/svg%3E"/>
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f5f5f5;--bg3:#ebebeb;
+  --text:#111111;--text2:#444444;--text3:#888888;
+  --red:#cc2200;--red2:#ff3311;--redbg:#fff0ee;
+  --border:#e0e0e0;--border2:#cccccc;
+  --green:#1a7a2e;--gbg:#eaf5ec;
+  --amber:#7a4f00;--abg:#fff3e0;
+  --gray:#666;--graybg:#f0f0f0;
+  --r:10px;--rs:7px;
+  --sb:env(safe-area-inset-bottom,0px);
+}
+.dark{
+  --bg:#111111;--bg2:#1c1c1c;--bg3:#252525;
+  --text:#f0f0f0;--text2:#aaaaaa;--text3:#666666;
+  --red:#ff4422;--red2:#ff6644;--redbg:#2a0a00;
+  --border:#2a2a2a;--border2:#3a3a3a;
+  --green:#4caf50;--gbg:#0a2010;
+  --amber:#ffb74d;--abg:#2a1800;
+  --gray:#888;--graybg:#252525;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);}
+#app{height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);}
+.content{flex:1;overflow-y:auto;padding:16px;padding-bottom:calc(72px + var(--sb));-webkit-overflow-scrolling:touch;}
+/* TOP HEADER */
+.appheader{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 0;flex-shrink:0;}
+.applogo{display:flex;align-items:center;gap:8px;}
+.applogo-icon{width:32px;height:32px;background:#111;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.dark .applogo-icon{background:#cc2200;}
+.applogo-text{font-size:15px;font-weight:800;color:var(--text);letter-spacing:0.5px;}
+.applogo-text span{color:var(--red);}
+/* BOTTOM NAV */
+.bnav{background:var(--bg);border-top:1px solid var(--border);display:flex;padding-bottom:var(--sb);flex-shrink:0;}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 2px;cursor:pointer;gap:2px;border:none;background:none;}
+.ni span{font-size:9px;color:var(--text3);}
+.ni svg{color:var(--text3);}
+.ni.on svg{color:var(--red);}
+.ni.on span{color:var(--red);font-weight:600;}
+/* COMMON */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.ptitle{font-size:20px;font-weight:700;color:var(--text);}
+.btn{background:transparent;border:1px solid var(--border2);border-radius:var(--rs);padding:7px 14px;font-size:13px;cursor:pointer;color:var(--text);font-family:inherit;}
+.btn:active{opacity:0.6;}
+.btnp{background:var(--red);color:#fff;border-color:var(--red);font-weight:600;}
+.btnp:hover{background:var(--red2);}
+.btng{background:var(--gbg);color:var(--green);border-color:var(--green);}
+.btnr{background:var(--redbg);color:var(--red);border-color:var(--red);}
+.btna{background:var(--abg);color:var(--amber);border-color:var(--amber);}
+.btnsm{font-size:12px;padding:5px 10px;}
+/* STATS */
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.sc{background:var(--bg2);border-radius:var(--rs);padding:12px;border:1px solid var(--border);}
+.sl{font-size:11px;color:var(--text3);margin-bottom:3px;}
+.sv{font-size:20px;font-weight:700;color:var(--text);}
+/* CLIENT CARDS */
+.clist{display:flex;flex-direction:column;gap:8px;}
+.cc{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;}
+.cc.trained{border-color:var(--red);background:var(--redbg);}
+.cc.expiring{border-color:var(--amber);}
+.cc.completed{border-color:var(--green);background:var(--gbg);}
+.ccomplete{font-size:11px;color:var(--green);margin-top:3px;font-weight:600;}
+.pfill.full{background:var(--green);}
+.cc.archived{opacity:0.7;border-style:dashed;}
+.ctop{display:flex;align-items:center;gap:10px;}
+.chk{width:28px;height:28px;border:2px solid var(--border2);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg);}
+.chk.on{background:var(--red);border-color:var(--red);}
+.chk svg{display:none;}.chk.on svg{display:block;}
+.av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;background:var(--bg2);color:var(--red);border:1.5px solid var(--border);}
+.ci{flex:1;min-width:0;}
+.cn{font-size:15px;font-weight:600;color:var(--text);}
+.cm{font-size:11px;color:var(--text3);margin-top:2px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.cwarn{font-size:11px;color:var(--amber);margin-top:3px;font-weight:500;}
+.cstamp{font-size:11px;color:var(--red);margin-top:3px;font-weight:500;}
+.crenew{font-size:11px;color:var(--green);margin-top:3px;font-weight:500;}
+.cr{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
+.bdg{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;white-space:nowrap;}
+.ba{background:var(--gbg);color:var(--green);}
+.bd{background:var(--abg);color:var(--amber);}
+.bo{background:var(--redbg);color:var(--red);}
+.bp{background:var(--graybg);color:var(--gray);}
+.bar2{background:var(--graybg);color:var(--gray);}
+.ptag{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--redbg);color:var(--red);font-weight:500;}
+.prow{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.pbar{height:5px;background:var(--bg3);border-radius:3px;flex:1;}
+.pfill{height:5px;border-radius:3px;background:var(--red);}
+.plbl{font-size:10px;color:var(--text3);white-space:nowrap;}
+.cact{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.tchip{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;white-space:nowrap;}
+.tcp{background:#e8f0fe;color:#1a56db;}
+.tcs{background:#e8fff3;color:#059669;}
+.tcg{background:var(--redbg);color:var(--red);}
+/* PAKETI */
+.pkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-bottom:16px;}
+.pkc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:relative;}
+.pkn{font-size:34px;font-weight:800;color:var(--red);}
+.pks{font-size:12px;color:var(--text3);margin-bottom:6px;}
+.pkp{font-size:19px;font-weight:700;color:var(--text);}
+.pknm{font-size:11px;color:var(--red);font-weight:500;margin-top:3px;}
+/* SEARCH */
+.sw{margin-bottom:12px;}
+.sw input{width:100%;padding:10px 14px;font-size:15px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;}
+/* NOTIF */
+.notif{background:var(--abg);border:1px solid var(--amber);border-radius:var(--rs);padding:10px 14px;margin-bottom:12px;display:none;}
+.notif.on{display:block;}
+.ntitle{font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px;}
+.nitem{font-size:12px;color:var(--amber);padding:2px 0;}
+/* CALENDAR */
+.calnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.calm{font-size:17px;font-weight:700;color:var(--text);}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cdn{text-align:center;font-size:10px;color:var(--text3);padding:3px 0 6px;font-weight:600;}
+.cday{min-height:56px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:4px;}
+.cday.empty{background:transparent;border-color:transparent;}
+.cday.today{border-color:var(--red);border-width:2px;}
+.cdn2{font-size:10px;color:var(--text3);margin-bottom:2px;}
+.cday.today .cdn2{font-weight:700;color:var(--red);}
+.cdot{font-size:9px;padding:1px 3px;border-radius:3px;background:var(--redbg);color:var(--red);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cmore{font-size:9px;padding:1px 3px;border-radius:3px;background:var(--bg3);color:var(--text3);}
+.slist{margin-top:14px;}
+.stitle{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:8px;}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px;}
+/* FINANSIJE */
+.fin-period{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.fin-period button{padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--bg2);font-size:12px;font-weight:500;cursor:pointer;color:var(--text);}
+.fin-period button.on{background:var(--red);color:#fff;border-color:var(--red);}
+.fin-big{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.fin-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
+.fin-card.accent{border-color:var(--red);background:var(--redbg);}
+.fin-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;}
+.fin-val{font-size:24px;font-weight:800;color:var(--text);}
+.fin-card.accent .fin-val{color:var(--red);}
+.fin-sub{font-size:11px;color:var(--text3);margin-top:3px;}
+.bwrap{display:flex;align-items:flex-end;gap:4px;height:110px;margin-bottom:4px;}
+.bcol{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;gap:3px;cursor:pointer;}
+.br{width:100%;border-radius:4px 4px 0 0;transition:opacity 0.15s;}
+.br:hover{opacity:0.75;}
+.bv{font-size:10px;font-weight:600;color:var(--text);}
+.bl{font-size:9px;color:var(--text3);}
+.cbrow{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.cbn{font-size:12px;color:var(--text);width:90px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cbt{flex:1;height:18px;background:var(--bg3);border-radius:4px;overflow:hidden;}
+.cbf{height:100%;border-radius:4px;}
+.cbc{font-size:11px;color:var(--text3);width:40px;text-align:right;}
+.secc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px;}
+.sectl{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;}
+/* WHATSAPP */
+.wa-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;}
+.wa-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.wa-info{font-size:12px;color:var(--text3);margin-bottom:10px;}
+.wa-msg{background:var(--bg);border:1px solid var(--border2);border-radius:var(--rs);padding:10px 12px;font-size:13px;color:var(--text);line-height:1.6;white-space:pre-wrap;margin-bottom:10px;}
+.wa-actions{display:flex;gap:8px;flex-wrap:wrap;}
+/* SETTINGS */
+.setrow{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid var(--border);}
+.setlbl{font-size:15px;font-weight:500;color:var(--text);}
+.setsub{font-size:12px;color:var(--text3);margin-top:2px;}
+.tog{width:46px;height:26px;background:var(--border2);border-radius:13px;cursor:pointer;position:relative;flex-shrink:0;}
+.tog.on{background:var(--red);}
+.togk{width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.tog.on .togk{left:23px;}
+/* COLOR PICKER */
+.color-opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.color-opt{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;}
+.color-opt.sel{border-color:var(--text);}
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:flex-end;justify-content:center;}
+.mbg.on{display:flex;}
+.modal{background:var(--bg);border-radius:20px 20px 0 0;padding:20px 16px;padding-bottom:calc(24px + var(--sb));width:100%;max-width:500px;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.mhandle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 18px;}
+.mtitle{font-size:17px;font-weight:700;color:var(--text);margin-bottom:16px;}
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:600;}
+.field input,.field select,.field textarea{width:100%;padding:11px 12px;font-size:15px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none;}
+.field textarea{resize:vertical;min-height:60px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.mact{display:flex;gap:8px;margin-top:18px;}
+.mact .btn{flex:1;text-align:center;padding:13px;font-size:15px;}
+.psgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;}
+.psopt{border:1px solid var(--border2);border-radius:var(--rs);padding:10px 6px;text-align:center;cursor:pointer;background:var(--bg2);}
+.psopt.sel{border:2.5px solid var(--red);background:var(--redbg);}
+.psopt .pn{font-size:20px;font-weight:800;color:var(--red);}
+.psopt .pl{font-size:10px;color:var(--text3);}
+.psopt .pp{font-size:13px;font-weight:700;color:var(--text);margin-top:2px;}
+.tysel{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;}
+.tyopt{border:1px solid var(--border2);border-radius:var(--rs);padding:12px 6px;text-align:center;cursor:pointer;background:var(--bg2);}
+.tyopt.sp{border:2.5px solid #1a56db;background:#e8f0fe;}
+.tyopt.ss{border:2.5px solid #059669;background:#e8fff3;}
+.tyopt.sg{border:2.5px solid var(--red);background:var(--redbg);}
+.rsgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
+.rsopt{border:1px solid var(--border2);border-radius:var(--rs);padding:12px;cursor:pointer;background:var(--bg2);}
+.rsopt.sel{border:2.5px solid var(--red);background:var(--redbg);}
+.rslbl{font-size:13px;font-weight:700;color:var(--text);}
+.rssub{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.4;}
+.rinfo{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:14px;}
+.toast{position:fixed;bottom:calc(80px + var(--sb));left:50%;transform:translateX(-50%) translateY(30px);background:#111;color:#fff;font-size:13px;padding:10px 20px;border-radius:22px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap;font-weight:500;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+.dark .toast{background:#cc2200;}
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:14px;}
+/* GROUPS */
+.grp-chip{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;white-space:nowrap;border:1px solid;}
+.grp-grid{display:flex;flex-direction:column;gap:8px;}
+.grp-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
+.grp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.grp-name{font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+.grp-members{font-size:12px;color:var(--text3);}
+.grp-actions{display:flex;gap:6px;}
+.color-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:border-color 0.15s;flex-shrink:0;}
+.color-dot.sel{border-color:var(--text);}
+.member-list{display:flex;flex-direction:column;gap:4px;margin-top:8px;}
+.member-row{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rs);}
+.member-name{font-size:13px;color:var(--text);}
+.chk-small{width:20px;height:20px;border:2px solid var(--border2);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(--bg);flex-shrink:0;}
+.chk-small.on{background:var(--red);border-color:var(--red);}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+/* RASPORED */
+.week-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.week-label{font-size:15px;font-weight:700;color:var(--text);}
+.sched-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px;}
+.sched-table{display:grid;min-width:560px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.sched-head{display:grid;grid-template-columns:52px repeat(7,1fr);background:var(--bg2);border-bottom:1px solid var(--border);}
+.sched-head-cell{padding:8px 4px;text-align:center;font-size:11px;font-weight:700;color:var(--text2);}
+.sched-head-cell.today-col{color:var(--red);}
+.sched-row{display:grid;grid-template-columns:52px repeat(7,1fr);border-bottom:0.5px solid var(--border);}
+.sched-row:last-child{border-bottom:none;}
+.sched-time{padding:6px 4px;text-align:right;font-size:10px;color:var(--text3);font-weight:500;padding-right:8px;display:flex;align-items:flex-start;justify-content:flex-end;border-right:1px solid var(--border);}
+.sched-cell{padding:3px;border-right:0.5px solid var(--border);min-height:44px;cursor:pointer;transition:background 0.1s;position:relative;}
+.sched-cell:last-child{border-right:none;}
+.sched-cell:hover{background:var(--redbg);}
+.sched-cell.today-col{background:var(--bg2);}
+.slot{border-radius:5px;padding:3px 5px;font-size:10px;font-weight:600;margin-bottom:2px;cursor:pointer;line-height:1.3;}
+.slot:hover{opacity:0.8;}
+.sched-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);}
+.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+/* SLOT MODAL */
+.client-pick{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;margin-top:6px;}
+.cpick-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;transition:background 0.1s;}
+.cpick-row:hover{background:var(--redbg);}
+.cpick-row.sel{border-color:var(--red);background:var(--redbg);}
+.cpick-av{width:30px;height:30px;border-radius:50%;background:var(--bg2);color:var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.cpick-name{font-size:14px;font-weight:500;color:var(--text);}
+.cpick-pkg{font-size:11px;color:var(--text3);}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="appheader">
+    <div class="applogo">
+      <div class="applogo-icon">
+        <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
+          <text y="72" x="50" text-anchor="middle" font-size="58" font-family="Arial Black,sans-serif" fill="white" font-weight="900">SF</text>
+        </svg>
+      </div>
+      <div class="applogo-text">STAMENIC<span>FITT</span></div>
+    </div>
+    <button class="btn btnsm" onclick="togDark()" style="font-size:16px;padding:4px 10px;">☀️</button>
+  </div>
+  <div class="content" id="content"></div>
+  <nav class="bnav" id="bnav"></nav>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- CLIENT MODAL -->
+<div class="mbg" id="mC">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mCt">Novi klijent</div>
+    <div class="field"><label>Ime i prezime</label><input id="fn" placeholder="npr. Ana Popović" autocomplete="name"/></div>
+    <div class="field"><label>Paket <span style="font-weight:400;color:var(--text3)">(opciono)</span></label><div class="psgrid" id="fpg"></div></div>
+    <div class="field"><label>Datum početka</label><input type="date" id="fs"/></div>
+    <div class="field"><label>Status</label>
+      <select id="fst">
+        <option value="active">Aktivan</option>
+        <option value="due">Plaćanje dospelo</option>
+        <option value="overdue">Kasni</option>
+        <option value="paused">Pauza</option>
+      </select>
+    </div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mC')">Otkaži</button>
+      <button class="btn btnp" onclick="saveC()">Sačuvaj</button>
+    </div>
+  </div>
+</div>
+
+<!-- RENEW MODAL -->
+<div class="mbg" id="mR">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mRt">Produži članarinu</div>
+    <div class="rinfo" id="mRi"></div>
+    <div class="field"><label>Izaberi paket</label><div class="psgrid" id="rpg"></div></div>
+    <div class="field"><label>Datum početka novog perioda</label><input type="date" id="rstart"/></div>
+    <div class="field"><label>Status</label>
+      <div class="rsgrid">
+        <div class="rsopt sel" id="rsa" onclick="selRS('active')"><div class="rslbl">Aktivan</div><div class="rssub">Klijent je platio</div></div>
+        <div class="rsopt" id="rsd" onclick="selRS('due')"><div class="rslbl">Čeka uplatu</div><div class="rssub">Još nije platio</div></div>
+      </div>
+    </div>
+    <div class="field"><label>Napomena (opciono)</label><input id="rnote" placeholder="npr. Plaćeno keš..."/></div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mR')">Otkaži</button>
+      <button class="btn btnp" onclick="doRenew()">Produži članarinu</button>
+    </div>
+  </div>
+</div>
+
+<!-- PKG MODAL -->
+<div class="mbg" id="mP">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mPt">Novi paket</div>
+    <div class="field"><label>Tip treninga</label>
+      <div class="tysel">
+        <div class="tyopt" id="typ" onclick="selT('p')"><div style="font-size:22px;margin-bottom:5px">👤</div><div style="font-size:11px;font-weight:600;color:var(--text)">Personalni</div><div style="font-size:10px;color:var(--text3)">1 na 1</div></div>
+        <div class="tyopt" id="tys" onclick="selT('s')"><div style="font-size:22px;margin-bottom:5px">👥</div><div style="font-size:11px;font-weight:600;color:var(--text)">Polu-pers.</div><div style="font-size:10px;color:var(--text3)">2–4 osobe</div></div>
+        <div class="tyopt" id="tyg" onclick="selT('g')"><div style="font-size:22px;margin-bottom:5px">🏃</div><div style="font-size:11px;font-weight:600;color:var(--text)">Grupni</div><div style="font-size:10px;color:var(--text3)">5+ osoba</div></div>
+      </div>
+    </div>
+    <div class="field"><label>Broj treninga</label><input type="number" id="ps" placeholder="npr. 12" inputmode="numeric"/></div>
+    <div class="field"><label>Cena (€)</label><input type="number" id="pp" placeholder="npr. 80" inputmode="numeric"/></div>
+    <div class="field"><label>Naziv (opciono)</label><input id="pn" placeholder="npr. Gold, Starter..."/></div>
+    <div style="font-size:12px;color:var(--text3);padding:10px 12px;background:var(--bg3);border-radius:var(--rs)">Paket traje <strong>30 dana</strong>.</div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mP')">Otkaži</button>
+      <button class="btn btnp" onclick="saveP()">Sačuvaj paket</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOG MODAL -->
+<div class="mbg" id="mL">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">Unesi trening</div>
+    <div class="field"><label>Klijent</label><select id="lc"></select></div>
+    <div class="field"><label>Datum</label><input type="date" id="ld"/></div>
+    <div class="frow">
+      <div class="field"><label>Trajanje (min)</label><input type="number" id="ldur" placeholder="60" inputmode="numeric"/></div>
+      <div class="field"><label>Tip</label><select id="lty"><option>Snaga</option><option>Kardio</option><option>HIIT</option><option>Mobilnost</option><option>Kombinirano</option></select></div>
+    </div>
+    <div class="field"><label>Napomena</label><textarea id="ln" placeholder="opciono..."></textarea></div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mL')">Otkaži</button>
+      <button class="btn btnp" onclick="saveS()">Sačuvaj</button>
+    </div>
+  </div>
+</div>
+
+<!-- WA TEMPLATE MODAL -->
+<div class="mbg" id="mW">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">Uredi WhatsApp poruku</div>
+    <div style="font-size:13px;color:var(--text3);margin-bottom:12px;">Koristi <strong>{ime}</strong>, <strong>{dani}</strong>, <strong>{datum}</strong>, <strong>{paket}</strong>, <strong>{cena}</strong> kao oznake koje se automatski popunjavaju.</div>
+    <div class="field"><label>Tekst poruke</label><textarea id="waTpl" style="min-height:160px;font-size:14px;"></textarea></div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mW')">Otkaži</button>
+      <button class="btn btnp" onclick="saveWaTpl()">Sačuvaj šablon</button>
+    </div>
+  </div>
+</div>
+
+<!-- GROUPS MODAL -->
+<div class="mbg" id="mG">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mGt">Nova grupa</div>
+    <div class="field"><label id="lGName">Naziv grupe</label><input id="gn" placeholder="npr. Jutarnja grupa, VIP..."/></div>
+    <div class="field">
+      <label id="lGColor">Boja grupe</label>
+      <div class="color-row" id="colorRow"></div>
+    </div>
+    <div class="field">
+      <label id="lGMembers">Klijenti u grupi</label>
+      <div id="memberPicker"></div>
+    </div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mG')">Otkaži</button>
+      <button class="btn btnp" onclick="saveG()">Sačuvaj</button>
+    </div>
+  </div>
+</div>
+
+<!-- SLOT MODAL -->
+<div class="mbg" id="mS">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mSt">Novi termin</div>
+    <div class="field">
+      <label>Klijent</label>
+      <div class="client-pick" id="slotClientPick"></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>Vreme</label>
+        <select id="sTime"></select>
+      </div>
+      <div class="field"><label>Trajanje (min)</label>
+        <select id="sDur">
+          <option value="30">30 min</option>
+          <option value="45">45 min</option>
+          <option value="60" selected>60 min</option>
+          <option value="90">90 min</option>
+          <option value="120">120 min</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Napomena (opciono)</label><input id="sNote" placeholder="npr. Snaga, HIIT..."/></div>
+    <div id="slotDeleteBtn" style="display:none;margin-top:4px;">
+      <button class="btn btnr" style="width:100%;padding:10px;" onclick="delSlot()">🗑 Obriši termin</button>
+    </div>
+    <div class="mact">
+      <button class="btn" onclick="cm('mS')">Otkaži</button>
+      <button class="btn btnp" onclick="saveSlot()">Sačuvaj termin</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var isDark=false,tab='clients',eCid=null,eRcid=null,ePid=null,sPid=null,rPid=null,pkgType='p',rStat='active';
+var calY=new Date().getFullYear(),calM=new Date().getMonth(),finPeriod='mesec';
+var TC={p:'tcp',s:'tcs',g:'tcg'};
+
+// ── TRANSLATIONS ──
+var lang='sr';
+var LANGS={
+  sr:{
+    clients:'Klijenti',packages:'Paketi',finance:'Finansije',whatsapp:'WhatsApp',archive:'Arhiva',settings:'Podešavanja',
+    newClient:'+ Novi',newPackage:'+ Novi paket',newSession:'+ Unesi trening',
+    active:'Aktivni',monthRevenue:'Prihod/mes.',today:'Danas',
+    search:'🔍 Pretraži...',
+    renew:'Produži',edit:'Izmeni',archiveBtn:'Arhiviraj',activate:'✓ Aktiviraj',deleteForever:'Obriši trajno',
+    trained:'✓ Trenirao u ',packageExpToday:'Paket ističe DANAS!',packageExpTomorrow:'Paket ističe sutra!',packageExpDays:'Paket ističe za ',days:' dana',
+    renewedOn:'✓ Članarina produžena ',
+    statusActive:'Aktivan',statusDue:'Dospelo',statusOverdue:'Kasni',statusPaused:'Pauza',statusArchived:'Arhiviran',
+    typePersonal:'Personalni',typeSemi:'Polu-pers.',typeGroup:'Grupni',
+    type1on1:'1 na 1',type24:'2–4 osobe',type5p:'5+ osoba',
+    sessions:'treninga',perDays:'/ 30 dana',noPackage:'Bez paketa',
+    packageExpiringSoon:'⚠️ Paketi ističu uskoro',packageDoneSoon:'✅ Iskorišćeni paketi',today2:'DANAS',tomorrow:'sutra',inDays:'za ',
+    packageCompleted:'🎉 Svi termini iskorišćeni!',packageCompletedSub:'Vreme je za produžetak paketa.',
+    sessionsDone:' od ',sessionsUsed:' termina iskorišćeno',
+    editClient:'Izmeni klijenta',newClientTitle:'Novi klijent',
+    fullName:'Ime i prezime',namePlaceholder:'npr. Ana Popović',
+    packageOpt:'Paket',optional:'(opciono)',startDate:'Datum početka',status:'Status',
+    cancel:'Otkaži',save:'Sačuvaj',
+    renewTitle:'Produži članarinu',currentPackage:'Trenutni paket',expires:'Ističe: ',used:'Iskorišćeno: ',noActivePackage:'Nema aktivnog paketa.',
+    selectPackage:'Izaberi paket',newPeriodStart:'Datum početka novog perioda',
+    afterRenew:'Status nakon produžavanja',clientPaid:'Klijent je platio',waitingPayment:'Još nije platio',waitingLabel:'Čeka uplatu',
+    note:'Napomena (opciono)',notePlaceholder:'npr. Plaćeno keš...',renewBtn:'Produži članarinu',
+    newPackageTitle:'Novi paket',editPackageTitle:'Izmeni paket',trainingType:'Tip treninga',
+    numSessions:'Broj treninga',numPlaceholder:'npr. 12',price:'Cena (€)',pricePlaceholder:'npr. 80',
+    packageName:'Naziv (opciono)',packageNamePh:'npr. Gold, Starter...',packageDuration:'Paket traje ',packageDays:'30 dana.',savePackage:'Sačuvaj paket',
+    logSession:'Unesi trening',client:'Klijent',date:'Datum',duration:'Trajanje (min)',durPlaceholder:'60',type:'Tip',
+    strength:'Snaga',cardio:'Kardio',hiit:'HIIT',mobility:'Mobilnost',combined:'Kombinirano',
+    sessionNote:'Napomena',sessionNotePh:'opciono...',
+    editWaTpl:'Uredi WhatsApp poruku',waTplHint:'Koristi {ime}, {dani}, {datum}, {paket}, {cena} kao oznake.',messageText:'Tekst poruke',saveTemplate:'Sačuvaj šablon',
+    finTitle:'Finansije',monthRevTitle:'Prihod ovog meseca',avgMonth:'Prosek / mesec',forPeriod:'za izabrani period',totalPeriod:'Ukupno u periodu',months:' meseci',yearProj:'Godišnja projekcija',basedOn:'na osnovu ovog meseca',
+    revenuePerMonth:'Prihod po mesecu',revenuePerClient:'Prihod po klijentu / mes.',revenuePerPackage:'Prihod po paketu',
+    activeClients:' aktivnih klijenata',noData:'Nema podataka.',
+    period1:'1 mesec',period3:'3 meseca',period6:'6 meseci',periodYear:'Godina',
+    waTitle:'WhatsApp',editTemplate:'✏️ Uredi šablon',waExpiring:'Klijenti kojima ističe paket u sledećih 14 dana:',waAll:'Pripremljene poruke za sve klijente:',noWaClients:'Nema klijenata sa aktivnim paketima.',
+    openWA:'📲 Otvori WhatsApp',copy:'Kopiraj',copied:'✓ Kopirano!',
+    archiveTitle:'Arhiva',archiveDesc:'Arhivirani klijenti su sačuvani — možeš ih aktivirati u bilo kom trenutku.',noArchived:'Nema arhiviranih klijenata.',totalSessions:' treninga ukupno',
+    settingsTitle:'Podešavanja',darkMode:'Tamni mod',darkModeSub:'Crna pozadina, crveni akcenti',
+    trainerNameLbl:'Naziv trenera',trainerNameSub:'Prikazuje se u WhatsApp porukama',
+    languageLbl:'Jezik / Language',waTplLbl:'WhatsApp šablon',waTplSub:'Prilagodi tekst podsetnika',
+    notifLbl:'Browser notifikacije',notifSub:'Upozorenje kad paket ističe',enableBtn:'Uključi',
+    clearDataLbl:'Obriši sve podatke',clearDataSub:'Briše sve klijente i treninge',deleteBtn:'Obriši',
+    version:'StamenicFitt Tracker v2.0',versionSub:'Podaci su sačuvani lokalno na telefonu',
+    toastArchived:'Klijent arhiviran 📦',toastActivated:'Klijent aktiviran ✓',toastDeleted:'Obrisan.',
+    toastTrainIn:'✓ Unesen u ',toastTrainRemoved:'Trening uklonjen',
+    toastRenewed:'✓ Članarina produžena!',toastClientSaved:'Klijent dodat! ✓',toastClientEdited:'Izmenjeno!',
+    toastPkgSaved:'Paket sačuvan!',toastPkgDeleted:'Obrisan.',toastPkgActive:'Paket je aktivan!',
+    toastEnterName:'Unesi ime!',toastEnterPkg:'Izaberi paket!',toastEnterDate:'Izaberi datum!',toastEnterSessions:'Unesi broj treninga i cenu!',
+    toastTplSaved:'Šablon sačuvan!',toastEnterTpl:'Upiši tekst!',toastSaved:'Sačuvano!',
+    toastNotifOn:'Notifikacije uključene!',toastNotifOff:'Odbijena.',toastNotifNo:'Nije podržano.',
+    confirmDelete:'Trajno obrisati?',confirmPkg:'Obrisati paket?',confirmAll:'Obrisati SVE podatke?',toastAllCleared:'Obrisano.',
+    noClients:'Nema klijenata.\nDodaj prvog klijenta!',noPackages:'Nema paketa. Dodaj prvi!',noSessions:'Nema treninga.',finNoData:'Nema podataka.',
+    groups:'Grupe',newGroup:'+ Nova grupa',editGroup:'Izmeni grupu',groupName:'Naziv grupe',groupColor:'Boja grupe',groupMembers:'Klijenti u grupi',noGroups:'Nema grupa. Napravi prvu!',groupDeleted:'Grupa obrisana.',groupSaved:'Grupa sačuvana!',allClients:'Svi klijenti',filterBy:'Filtriraj po grupi',
+    schedule:'Raspored',weekOf:'Nedelja od ',prevWeek:'← Prethodna',nextWeek:'Sledeća →',thisWeek:'Danas',addSlot:'+ Dodaj termin',editSlot:'Izmeni termin',deleteSlot:'Obriši termin',slotClient:'Izaberi klijenta',slotTime:'Vreme',slotDuration:'Trajanje (min)',slotNote:'Napomena',slotSaved:'Termin sačuvan!',slotDeleted:'Termin obrisan.',noSlotClient:'Izaberi klijenta!',days7:['Pon','Uto','Sre','Čet','Pet','Sub','Ned'],confirmSlotDelete:'Obrisati termin?'
+  },
+  en:{
+    clients:'Clients',packages:'Packages',finance:'Finance',whatsapp:'WhatsApp',archive:'Archive',settings:'Settings',
+    newClient:'+ New',newPackage:'+ New package',newSession:'+ Log session',
+    active:'Active',monthRevenue:'Revenue/mo.',today:'Today',
+    search:'🔍 Search...',
+    renew:'Renew',edit:'Edit',archiveBtn:'Archive',activate:'✓ Activate',deleteForever:'Delete forever',
+    trained:'✓ Trained at ',packageExpToday:'Package expires TODAY!',packageExpTomorrow:'Package expires tomorrow!',packageExpDays:'Package expires in ',days:' days',
+    renewedOn:'✓ Membership renewed ',
+    statusActive:'Active',statusDue:'Payment due',statusOverdue:'Overdue',statusPaused:'Paused',statusArchived:'Archived',
+    typePersonal:'Personal',typeSemi:'Semi-personal',typeGroup:'Group',
+    type1on1:'1 on 1',type24:'2–4 people',type5p:'5+ people',
+    sessions:'sessions',perDays:'/ 30 days',noPackage:'No package',
+    packageExpiringSoon:'⚠️ Packages expiring soon',packageDoneSoon:'✅ Completed packages',today2:'TODAY',tomorrow:'tomorrow',inDays:'in ',
+    packageCompleted:'🎉 All sessions used!',packageCompletedSub:'Time to renew the package.',
+    sessionsDone:' of ',sessionsUsed:' sessions used',
+    editClient:'Edit client',newClientTitle:'New client',
+    fullName:'Full name',namePlaceholder:'e.g. John Smith',
+    packageOpt:'Package',optional:'(optional)',startDate:'Start date',status:'Status',
+    cancel:'Cancel',save:'Save',
+    renewTitle:'Renew membership',currentPackage:'Current package',expires:'Expires: ',used:'Used: ',noActivePackage:'No active package.',
+    selectPackage:'Select package',newPeriodStart:'New period start date',
+    afterRenew:'Status after renewal',clientPaid:'Client has paid',waitingPayment:'Payment not received yet',waitingLabel:'Awaiting payment',
+    note:'Note (optional)',notePlaceholder:'e.g. Paid cash...',renewBtn:'Renew membership',
+    newPackageTitle:'New package',editPackageTitle:'Edit package',trainingType:'Training type',
+    numSessions:'Number of sessions',numPlaceholder:'e.g. 12',price:'Price (€)',pricePlaceholder:'e.g. 80',
+    packageName:'Package name (optional)',packageNamePh:'e.g. Gold, Starter...',packageDuration:'Package lasts ',packageDays:'30 days.',savePackage:'Save package',
+    logSession:'Log session',client:'Client',date:'Date',duration:'Duration (min)',durPlaceholder:'60',type:'Type',
+    strength:'Strength',cardio:'Cardio',hiit:'HIIT',mobility:'Mobility',combined:'Combined',
+    sessionNote:'Note',sessionNotePh:'optional...',
+    editWaTpl:'Edit WhatsApp message',waTplHint:'Use {name}, {days}, {date}, {package}, {price} as placeholders.',messageText:'Message text',saveTemplate:'Save template',
+    finTitle:'Finance',monthRevTitle:'This month\'s revenue',avgMonth:'Average / month',forPeriod:'for selected period',totalPeriod:'Total in period',months:' months',yearProj:'Annual projection',basedOn:'based on this month',
+    revenuePerMonth:'Revenue per month',revenuePerClient:'Revenue per client / mo.',revenuePerPackage:'Revenue per package',
+    activeClients:' active clients',noData:'No data.',
+    period1:'1 month',period3:'3 months',period6:'6 months',periodYear:'Year',
+    waTitle:'WhatsApp',editTemplate:'✏️ Edit template',waExpiring:'Clients whose package expires in the next 14 days:',waAll:'Prepared messages for all clients:',noWaClients:'No clients with active packages.',
+    openWA:'📲 Open WhatsApp',copy:'Copy',copied:'✓ Copied!',
+    archiveTitle:'Archive',archiveDesc:'Archived clients are saved — you can reactivate them at any time.',noArchived:'No archived clients.',totalSessions:' sessions total',
+    settingsTitle:'Settings',darkMode:'Dark mode',darkModeSub:'Black background, red accents',
+    trainerNameLbl:'Trainer name',trainerNameSub:'Shown in WhatsApp messages',
+    languageLbl:'Language / Jezik',waTplLbl:'WhatsApp template',waTplSub:'Customize reminder text',
+    notifLbl:'Browser notifications',notifSub:'Alert when package expires',enableBtn:'Enable',
+    clearDataLbl:'Clear all data',clearDataSub:'Deletes all clients and sessions',deleteBtn:'Delete',
+    version:'StamenicFitt Tracker v2.0',versionSub:'Data is saved locally on your device',
+    toastArchived:'Client archived 📦',toastActivated:'Client activated ✓',toastDeleted:'Deleted.',
+    toastTrainIn:'✓ Logged at ',toastTrainRemoved:'Session removed',
+    toastRenewed:'✓ Membership renewed!',toastClientSaved:'Client added! ✓',toastClientEdited:'Updated!',
+    toastPkgSaved:'Package saved!',toastPkgDeleted:'Deleted.',toastPkgActive:'Package is active!',
+    toastEnterName:'Enter name!',toastEnterPkg:'Select a package!',toastEnterDate:'Select a date!',toastEnterSessions:'Enter sessions and price!',
+    toastTplSaved:'Template saved!',toastEnterTpl:'Enter text!',toastSaved:'Saved!',
+    toastNotifOn:'Notifications enabled!',toastNotifOff:'Denied.',toastNotifNo:'Not supported.',
+    confirmDelete:'Delete permanently?',confirmPkg:'Delete package?',confirmAll:'Delete ALL data?',toastAllCleared:'Cleared.',
+    noClients:'No clients.\nAdd your first client!',noPackages:'No packages. Add first!',noSessions:'No sessions.',finNoData:'No data.',
+    groups:'Groups',newGroup:'+ New group',editGroup:'Edit group',groupName:'Group name',groupColor:'Group color',groupMembers:'Clients in group',noGroups:'No groups. Create the first!',groupDeleted:'Group deleted.',groupSaved:'Group saved!',allClients:'All clients',filterBy:'Filter by group',
+    schedule:'Schedule',weekOf:'Week of ',prevWeek:'← Previous',nextWeek:'Next →',thisWeek:'Today',addSlot:'+ Add session',editSlot:'Edit session',deleteSlot:'Delete session',slotClient:'Select client',slotTime:'Time',slotDuration:'Duration (min)',slotNote:'Note',slotSaved:'Session saved!',slotDeleted:'Session deleted.',noSlotClient:'Select a client!',days7:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],confirmSlotDelete:'Delete this session?'
+  },
+  ru:{
+    clients:'Клиенты',packages:'Пакеты',finance:'Финансы',whatsapp:'WhatsApp',archive:'Архив',settings:'Настройки',
+    newClient:'+ Новый',newPackage:'+ Новый пакет',newSession:'+ Добавить тренировку',
+    active:'Активные',monthRevenue:'Доход/мес.',today:'Сегодня',
+    search:'🔍 Поиск...',
+    renew:'Продлить',edit:'Изменить',archiveBtn:'Архивировать',activate:'✓ Активировать',deleteForever:'Удалить навсегда',
+    trained:'✓ Тренировался в ',packageExpToday:'Пакет истекает СЕГОДНЯ!',packageExpTomorrow:'Пакет истекает завтра!',packageExpDays:'Пакет истекает через ',days:' дней',
+    renewedOn:'✓ Членство продлено ',
+    statusActive:'Активен',statusDue:'Оплата просрочена',statusOverdue:'Задолжал',statusPaused:'Пауза',statusArchived:'Архив',
+    typePersonal:'Персональный',typeSemi:'Полу-персональный',typeGroup:'Групповой',
+    type1on1:'1 на 1',type24:'2–4 человека',type5p:'5+ человек',
+    sessions:'тренировок',perDays:'/ 30 дней',noPackage:'Без пакета',
+    packageExpiringSoon:'⚠️ Пакеты скоро истекают',packageDoneSoon:'✅ Использованные пакеты',today2:'СЕГОДНЯ',tomorrow:'завтра',inDays:'через ',
+    packageCompleted:'🎉 Все тренировки использованы!',packageCompletedSub:'Пора продлить пакет.',
+    sessionsDone:' из ',sessionsUsed:' тренировок использовано',
+    editClient:'Изменить клиента',newClientTitle:'Новый клиент',
+    fullName:'Имя и фамилия',namePlaceholder:'напр. Иван Иванов',
+    packageOpt:'Пакет',optional:'(необязательно)',startDate:'Дата начала',status:'Статус',
+    cancel:'Отмена',save:'Сохранить',
+    renewTitle:'Продлить членство',currentPackage:'Текущий пакет',expires:'Истекает: ',used:'Использовано: ',noActivePackage:'Нет активного пакета.',
+    selectPackage:'Выберите пакет',newPeriodStart:'Дата начала нового периода',
+    afterRenew:'Статус после продления',clientPaid:'Клиент оплатил',waitingPayment:'Оплата ещё не поступила',waitingLabel:'Ожидает оплаты',
+    note:'Заметка (необязательно)',notePlaceholder:'напр. Оплачено наличными...',renewBtn:'Продлить членство',
+    newPackageTitle:'Новый пакет',editPackageTitle:'Изменить пакет',trainingType:'Тип тренировки',
+    numSessions:'Количество тренировок',numPlaceholder:'напр. 12',price:'Цена (€)',pricePlaceholder:'напр. 80',
+    packageName:'Название пакета (необязательно)',packageNamePh:'напр. Gold, Стартер...',packageDuration:'Пакет действует ',packageDays:'30 дней.',savePackage:'Сохранить пакет',
+    logSession:'Добавить тренировку',client:'Клиент',date:'Дата',duration:'Длительность (мин)',durPlaceholder:'60',type:'Тип',
+    strength:'Сила',cardio:'Кардио',hiit:'ВИИТ',mobility:'Мобильность',combined:'Комплексная',
+    sessionNote:'Заметка',sessionNotePh:'необязательно...',
+    editWaTpl:'Редактировать сообщение WhatsApp',waTplHint:'Используйте {ime}, {dani}, {datum}, {paket}, {cena} как метки.',messageText:'Текст сообщения',saveTemplate:'Сохранить шаблон',
+    finTitle:'Финансы',monthRevTitle:'Доход за этот месяц',avgMonth:'Среднее / месяц',forPeriod:'за выбранный период',totalPeriod:'Итого за период',months:' месяцев',yearProj:'Годовой прогноз',basedOn:'на основе этого месяца',
+    revenuePerMonth:'Доход по месяцам',revenuePerClient:'Доход по клиенту / мес.',revenuePerPackage:'Доход по пакету',
+    activeClients:' активных клиентов',noData:'Нет данных.',
+    period1:'1 месяц',period3:'3 месяца',period6:'6 месяцев',periodYear:'Год',
+    waTitle:'WhatsApp',editTemplate:'✏️ Редактировать шаблон',waExpiring:'Клиенты, у которых пакет истекает в ближайшие 14 дней:',waAll:'Подготовленные сообщения для всех клиентов:',noWaClients:'Нет клиентов с активными пакетами.',
+    openWA:'📲 Открыть WhatsApp',copy:'Копировать',copied:'✓ Скопировано!',
+    archiveTitle:'Архив',archiveDesc:'Архивированные клиенты сохранены — вы можете активировать их в любое время.',noArchived:'Нет архивированных клиентов.',totalSessions:' тренировок всего',
+    settingsTitle:'Настройки',darkMode:'Тёмный режим',darkModeSub:'Чёрный фон, красные акценты',
+    trainerNameLbl:'Имя тренера',trainerNameSub:'Отображается в сообщениях WhatsApp',
+    languageLbl:'Язык / Jezik',waTplLbl:'Шаблон WhatsApp',waTplSub:'Настройте текст напоминания',
+    notifLbl:'Уведомления браузера',notifSub:'Оповещение когда истекает пакет',enableBtn:'Включить',
+    clearDataLbl:'Удалить все данные',clearDataSub:'Удаляет всех клиентов и тренировки',deleteBtn:'Удалить',
+    version:'StamenicFitt Tracker v2.0',versionSub:'Данные сохранены локально на вашем устройстве',
+    toastArchived:'Клиент архивирован 📦',toastActivated:'Клиент активирован ✓',toastDeleted:'Удалено.',
+    toastTrainIn:'✓ Добавлено в ',toastTrainRemoved:'Тренировка удалена',
+    toastRenewed:'✓ Членство продлено!',toastClientSaved:'Клиент добавлен! ✓',toastClientEdited:'Изменено!',
+    toastPkgSaved:'Пакет сохранён!',toastPkgDeleted:'Удалено.',toastPkgActive:'Пакет активен!',
+    toastEnterName:'Введите имя!',toastEnterPkg:'Выберите пакет!',toastEnterDate:'Выберите дату!',toastEnterSessions:'Введите тренировки и цену!',
+    toastTplSaved:'Шаблон сохранён!',toastEnterTpl:'Введите текст!',toastSaved:'Сохранено!',
+    toastNotifOn:'Уведомления включены!',toastNotifOff:'Отказано.',toastNotifNo:'Не поддерживается.',
+    confirmDelete:'Удалить навсегда?',confirmPkg:'Удалить пакет?',confirmAll:'Удалить ВСЕ данные?',toastAllCleared:'Очищено.',
+    noClients:'Нет клиентов.\nДобавьте первого клиента!',noPackages:'Нет пакетов. Добавьте первый!',noSessions:'Нет тренировок.',finNoData:'Нет данных.',
+    groups:'Группы',newGroup:'+ Новая группа',editGroup:'Изменить группу',groupName:'Название группы',groupColor:'Цвет группы',groupMembers:'Клиенты в группе',noGroups:'Нет групп. Создайте первую!',groupDeleted:'Группа удалена.',groupSaved:'Группа сохранена!',allClients:'Все клиенты',filterBy:'Фильтр по группе',
+    schedule:'Расписание',weekOf:'Неделя с ',prevWeek:'← Пред.',nextWeek:'След. →',thisWeek:'Сегодня',addSlot:'+ Добавить',editSlot:'Изменить',deleteSlot:'Удалить',slotClient:'Выберите клиента',slotTime:'Время',slotDuration:'Длительность (мин)',slotNote:'Заметка',slotSaved:'Сохранено!',slotDeleted:'Удалено.',noSlotClient:'Выберите клиента!',days7:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],confirmSlotDelete:'Удалить этот сеанс?'
+  }
+};
+function t(k){return(LANGS[lang]&&LANGS[lang][k])||LANGS['sr'][k]||k;}
+var TL={p:t('typePersonal'),s:t('typeSemi'),g:t('typeGroup')};
+
+var DEFAULT_WA_TPL = "Zdravo {ime}! 👋\n\nPodsetnik da ti paket *{paket}* ističe za *{dani} dana* ({datum}).\n\nCena produžetka: *€{cena}*\n\nJavi se da dogovorimo nastavak! 💪\n\n– StamenicFitt";
+
+var pkgs=[
+  {id:1,s:8,p:60,n:'Starter',t:'p'},
+  {id:2,s:12,p:80,n:'Standard',t:'s'},
+  {id:3,s:16,p:100,n:'Premium',t:'g'}
+];
+var clients=[
+  {id:1,name:'Marko Jovanović',pid:3,pstart:'2026-04-01',pused:7,st:'active',rat:null,rn:'',arch:false},
+  {id:2,name:'Jelena Nikolić',pid:2,pstart:'2026-04-10',pused:3,st:'due',rat:null,rn:'',arch:false},
+  {id:3,name:'Stefan Petrović',pid:1,pstart:'2026-03-28',pused:6,st:'active',rat:null,rn:'',arch:false},
+  {id:4,name:'Milica Savić',pid:2,pstart:'2026-04-05',pused:2,st:'active',rat:null,rn:'',arch:false}
+];
+var sessions=[
+  {id:1,cid:1,date:'2026-04-03',time:'10:00',dur:60,type:'Snaga',note:''},
+  {id:2,cid:2,date:'2026-04-05',time:'09:30',dur:45,type:'Kardio',note:''},
+  {id:3,cid:1,date:'2026-04-08',time:'11:00',dur:60,type:'HIIT',note:''},
+  {id:4,cid:3,date:'2026-03-10',time:'08:00',dur:60,type:'Snaga',note:''},
+  {id:5,cid:4,date:'2026-03-15',time:'17:00',dur:50,type:'Mobilnost',note:''},
+  {id:6,cid:2,date:'2026-02-07',time:'10:00',dur:45,type:'Kardio',note:''},
+  {id:7,cid:1,date:'2026-02-14',time:'09:00',dur:60,type:'Snaga',note:''},
+  {id:8,cid:3,date:'2026-01-10',time:'08:00',dur:60,type:'Snaga',note:''},
+  {id:9,cid:1,date:'2025-12-05',time:'09:00',dur:60,type:'HIIT',note:''},
+  {id:10,cid:4,date:'2025-11-20',time:'17:00',dur:50,type:'Mobilnost',note:''}
+];
+
+var groups=[];
+var slots=[];
+var eGid=null,selGColor='#cc2200',filterGroup='';
+var eSlotId=null,slotSelCid=null,weekOffset=0;
+var GROUP_COLORS=['#cc2200','#1a7a2e','#1a56db','#9333ea','#059669','#d97706','#0891b2','#be185d','#374151'];
+var SLOT_HOURS=['06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
+
+var NAVS=[
+  {id:'clients',lbl:'Klijenti',ic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'},
+  {id:'paketi',lbl:'Paketi',ic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>'},
+  {id:'grupe',lbl:'Grupe',ic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg>'},
+  {id:'raspored',lbl:'Raspored',ic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/></svg>'},
+  {id:'finansije',lbl:'Finansije',ic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>'},
+  {id:'whatsapp',lbl:'WhatsApp',ic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'},
+  {id:'arhiva',lbl:'Arhiva',ic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>'},
+  {id:'settings',lbl:'Podešavanja',ic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>'}
+];
+
+function sv(){try{localStorage.setItem('ptpkgs',JSON.stringify(pkgs));localStorage.setItem('ptclients',JSON.stringify(clients));localStorage.setItem('ptsessions',JSON.stringify(sessions));localStorage.setItem('ptdark',isDark?'1':'0');localStorage.setItem('ptwatpl',waTpl());localStorage.setItem('ptlang',lang);localStorage.setItem('ptgroups',JSON.stringify(groups));localStorage.setItem('ptslots',JSON.stringify(slots));}catch(e){}}
+function ld(){try{var a=localStorage.getItem('ptpkgs'),b=localStorage.getItem('ptclients'),c=localStorage.getItem('ptsessions'),d=localStorage.getItem('ptdark'),l=localStorage.getItem('ptlang'),g=localStorage.getItem('ptgroups'),sl=localStorage.getItem('ptslots');if(a)pkgs=JSON.parse(a);if(b)clients=JSON.parse(b);if(c)sessions=JSON.parse(c);if(d)isDark=d==='1';if(l)lang=l;if(g)groups=JSON.parse(g);if(sl)slots=JSON.parse(sl);}catch(e){}}
+function waTpl(){return localStorage.getItem('ptwatpl')||DEFAULT_WA_TPL;}
+ld();
+function refreshTL(){TL={p:t('typePersonal'),s:t('typeSemi'),g:t('typeGroup')};}
+
+function now2(){var n=new Date();return{date:n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate()),time:pad(n.getHours())+':'+pad(n.getMinutes())};}
+function pad(x){return String(x).padStart(2,'0');}
+function today(){return now2().date;}
+function du(d){var t=new Date();t.setHours(0,0,0,0);var x=new Date(d);x.setHours(0,0,0,0);return Math.round((x-t)/86400000);}
+function exp(c){if(!c.pstart)return null;var d=new Date(c.pstart);d.setDate(d.getDate()+30);return d.toISOString().split('T')[0];}
+function pgb(id){return pkgs.find(function(p){return p.id===id;});}
+function cb(id){return clients.find(function(c){return c.id===id;});}
+function ini(n){return n.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);}
+function fd(d){if(!d)return'—';var a=d.split('-');return a[2]+'/'+a[1]+'/'+a[0];}
+function bc(s){return{active:'ba',due:'bd',overdue:'bo',paused:'bp'}[s]||'bp';}
+function bl2(s){return{active:t('statusActive'),due:t('statusDue'),overdue:t('statusOverdue'),paused:t('statusPaused')}[s]||s;}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+function om(id){document.getElementById(id).classList.add('on');}
+function cm(id){document.getElementById(id).classList.remove('on');}
+function theme(){
+  document.getElementById('app').className=isDark?'dark':'';
+  var btn=document.querySelector('.appheader .btn');
+  if(btn)btn.textContent=isDark?'🌙':'☀️';
+}
+
+function setLang(l){lang=l;refreshTL();sv();nav();rp();}
+function nav(){
+  var ids=['clients','paketi','grupe','raspored','finansije','whatsapp','arhiva','settings'];
+  var lkeys=['clients','packages','groups','schedule','finance','whatsapp','archive','settings'];
+  document.getElementById('bnav').innerHTML=NAVS.map(function(n,i){
+    return '<button class="ni'+(tab===n.id?' on':'')+'" onclick="st(\''+n.id+'\')">'+n.ic+'<span>'+t(lkeys[i])+'</span></button>';
+  }).join('');
+}
+function st(t2){tab=t2;nav();rp();}
+function rp(){
+  var c=document.getElementById('content');
+  if(tab==='clients')c.innerHTML=pgC();
+  else if(tab==='paketi')c.innerHTML=pgPaketi();
+  else if(tab==='grupe')c.innerHTML=pgGrupe();
+  else if(tab==='raspored')c.innerHTML=pgRaspored();
+  else if(tab==='finansije')c.innerHTML=pgFin();
+  else if(tab==='whatsapp')c.innerHTML=pgWA();
+  else if(tab==='arhiva')c.innerHTML=pgArh();
+  else if(tab==='settings')c.innerHTML=pgSet();
+}
+
+function selT(t){pkgType=t;['p','s','g'].forEach(function(x){var el=document.getElementById('ty'+x);if(el)el.className='tyopt'+(x===t?' s'+t:'');});}
+function selRS(s){rStat=s;var ea=document.getElementById('rsa'),ed=document.getElementById('rsd');if(ea)ea.className='rsopt'+(s==='active'?' sel':'');if(ed)ed.className='rsopt'+(s==='due'?' sel':'');}
+
+// ── CLIENTS ──
+function pgC(){
+  var ac=clients.filter(function(c){return !c.arch;});
+  var expiring=ac.filter(function(c){var e=exp(c);return e&&c.st!=='paused'&&du(e)>=0&&du(e)<=7;});
+  var completed=ac.filter(function(c){var p=c.pid?pgb(c.pid):null;return p&&(c.pused||0)>=p.s&&c.st!=='paused';});
+  var notif=expiring.length?'<div class="notif on"><div class="ntitle">'+t('packageExpiringSoon')+'</div>'+expiring.map(function(c){var d=du(exp(c));return'<div class="nitem">'+c.name+' — '+(d===0?t('today2'):d===1?t('tomorrow'):t('inDays')+d+t('days'))+'</div>';}).join('')+'</div>':'';
+  var notifDone=completed.length?'<div class="notif on" style="background:var(--gbg);border-color:var(--green)"><div class="ntitle" style="color:var(--green)">'+t('packageDoneSoon')+'</div>'+completed.map(function(c){var p=pgb(c.pid);return'<div class="nitem" style="color:var(--green)">'+c.name+' — '+t('packageCompleted')+'</div>';}).join('')+'</div>':'';
+  var td=sessions.filter(function(s){return s.date===today();}).length;
+  var arc=clients.filter(function(c){return c.arch;}).length;
+  // Group filter chips
+  var filterChips='';
+  if(groups.length){
+    filterChips='<div class="filter-row"><button onclick="setGF(\'\')" style="padding:5px 12px;border-radius:20px;border:1px solid '+(filterGroup===''?'var(--red)':'var(--border2)')+';background:'+(filterGroup===''?'var(--redbg)':'var(--bg2)')+';font-size:12px;font-weight:'+(filterGroup===''?'700':'400')+';cursor:pointer;color:var(--text);font-family:inherit;">'+t('allClients')+'</button>'+
+    groups.map(function(g){return'<button onclick="setGF(\''+g.id+'\')" style="padding:5px 12px;border-radius:20px;border:1px solid '+(filterGroup==g.id?g.color:'var(--border2)')+';background:'+(filterGroup==g.id?g.color+'22':'var(--bg2)')+';font-size:12px;font-weight:'+(filterGroup==g.id?'700':'400')+';cursor:pointer;color:'+(filterGroup==g.id?g.color:'var(--text)')+';font-family:inherit;">'+g.name+'</button>';}).join('')+'</div>';
+  }
+  var displayList=filterGroup?ac.filter(function(c){var g=groups.find(function(gr){return gr.id==filterGroup;});return g&&g.members&&g.members.indexOf(c.id)>-1;}):ac;
+  return notif+notifDone+
+    '<div class="topbar"><div class="ptitle">'+t('clients')+'</div><button class="btn btnp" onclick="openCM()">'+t('newClient')+'</button></div>'+
+    '<div class="sgrid" style="grid-template-columns:1fr 1fr"><div class="sc"><div class="sl">'+t('active')+'</div><div class="sv">'+ac.length+'</div></div><div class="sc"><div class="sl">'+t('today')+'</div><div class="sv">'+td+'</div></div></div>'+
+    filterChips+
+    '<div class="sw"><input placeholder="'+t('search')+'" oninput="filterC(this.value)"/></div>'+
+    '<div class="clist" id="cl">'+rcards(displayList)+'</div>'+
+    (arc?'<div style="text-align:center;margin-top:16px"><button class="btn btnsm" onclick="st(\'arhiva\')">📦 '+t('archive')+' ('+arc+')</button></div>':'');
+}
+
+function rcards(list){
+  if(!list.length)return'<div class="empty">Nema klijenata.<br/>Dodaj prvog klijenta!</div>';
+  return list.map(function(c){
+    var p=c.pid?pgb(c.pid):null;
+    var e=exp(c),dl=e?du(e):null;
+    var used=c.pused||0,total=p?p.s:0;
+    var pct=total?Math.min(100,Math.round(used/total*100)):0;
+    var isDone=total>0&&used>=total;
+    var chk=sessions.some(function(s){return s.cid===c.id&&s.date===today();});
+    var ts=sessions.find(function(s){return s.cid===c.id&&s.date===today();});
+    var warn=(dl!==null&&dl>=0&&dl<=7&&c.st!=='paused'&&!isDone)?(dl===0?t('packageExpToday'):dl===1?t('packageExpTomorrow'):t('packageExpDays')+dl+t('days')):'';
+    var renewed=c.rat&&du(c.rat)>=-3&&du(c.rat)<=0;
+    return'<div class="cc'+(chk?' trained':'')+(isDone?' completed':warn?' expiring':'')+'">'+
+      '<div class="ctop">'+
+        '<div class="chk'+(chk?' on':'')+'" onclick="togTrain('+c.id+')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polyline points="2,7 5.5,10.5 12,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+        '<div class="av">'+ini(c.name)+'</div>'+
+        '<div class="ci">'+
+          '<div class="cn">'+c.name+'</div>'+
+          '<div class="cm">'+(p?'<span class="tchip '+TC[p.t]+'">'+TL[p.t]+'</span>':'')+' '+(p?'<span>'+p.s+' '+t('sessions')+' · €'+p.p+'</span>':'<span style="color:var(--text3)">'+t('noPackage')+'</span>')+(e?'<span>· '+fd(e)+'</span>':'')+
+          function(){var cgs=groups.filter(function(g){return g.members&&g.members.indexOf(c.id)>-1;});return cgs.map(function(g){return'<span class="grp-chip" style="background:'+g.color+'22;color:'+g.color+';border-color:'+g.color+'44">'+g.name+'</span>';}).join('');}()+
+          '</div>'+
+          (ts?'<div class="cstamp">'+t('trained')+ts.time+'</div>':'')+
+          (isDone?'<div class="ccomplete">'+t('packageCompleted')+' '+t('packageCompletedSub')+'</div>':(warn?'<div class="cwarn">'+warn+'</div>':(p&&total>0?'<div style="font-size:11px;color:var(--text3);margin-top:2px">'+used+t('sessionsDone')+total+t('sessionsUsed')+'</div>':'')))+
+          (renewed?'<div class="crenew">'+t('renewedOn')+fd(c.rat)+(c.rn?' · '+c.rn:'')+'</div>':'')+
+        '</div>'+
+        '<div class="cr"><span class="bdg '+bc(c.st)+'">'+bl2(c.st)+'</span>'+(p?'<span class="ptag" style="'+(isDone?'background:var(--gbg);color:var(--green);':'')+'">'+used+'/'+total+'</span>':'')+'</div>'+
+      '</div>'+
+      (p?'<div class="prow"><div class="pbar"><div class="pfill'+(isDone?' full':'')+'" style="width:'+Math.min(pct,100)+'%"></div></div><span class="plbl" style="'+(isDone?'color:var(--green);font-weight:600':'')+'">'+pct+'%</span></div>':'')+
+      '<div class="cact">'+
+        '<button class="btn btng btnsm" onclick="openRM('+c.id+')">Produži</button>'+
+        '<button class="btn btnsm" onclick="openCM('+c.id+')">Izmeni</button>'+
+        '<button class="btn btnsm btna" onclick="archC('+c.id+')">Arhiviraj</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+function filterC(q){var el=document.getElementById('cl');if(el)el.innerHTML=rcards(clients.filter(function(c){return !c.arch&&c.name.toLowerCase().indexOf(q.toLowerCase())>-1;}));}
+function togTrain(cid){var d=now2(),c=cb(cid),ex=sessions.find(function(s){return s.cid===cid&&s.date===d.date;});if(ex){sessions=sessions.filter(function(s){return!(s.cid===cid&&s.date===d.date);});if(c&&c.pused>0)c.pused--;}else{sessions.push({id:Date.now(),cid:cid,date:d.date,time:d.time,dur:60,type:'Kombinirano',note:'Brzi unos'});if(c)c.pused=(c.pused||0)+1;}sv();var p=c&&c.pid?pgb(c.pid):null;var justDone=!ex&&p&&(c.pused||0)>=p.s;rp();toast(ex?t('toastTrainRemoved'):(justDone?'🎉 '+c.name.split(' ')[0]+' — '+t('packageCompleted'):t('toastTrainIn')+d.time));}
+function archC(id){var i=clients.findIndex(function(c){return c.id===id;});if(i>-1){clients[i].arch=true;sv();rp();toast(t('toastArchived'));}}
+function actC(id){var i=clients.findIndex(function(c){return c.id===id;});if(i>-1){clients[i].arch=false;sv();rp();toast(t('toastActivated'));}}
+function delC(id){if(!confirm(t('confirmDelete')))return;clients=clients.filter(function(c){return c.id!==id;});sessions=sessions.filter(function(s){return s.cid!==id;});sv();rp();toast(t('toastDeleted'));}
+
+function bps(gid,cid,pfx){var el=document.getElementById(gid);if(!el)return;if(!pkgs.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);grid-column:1/-1">Dodaj pakete u tabu Paketi.</div>';return;}el.innerHTML=pkgs.map(function(p){return'<div class="psopt'+(p.id===cid?' sel':'')+'" onclick="'+pfx+'('+p.id+',\''+gid+'\')"><div class="pn">'+p.s+'</div><div class="pl">treninga</div><div class="pp">€'+p.p+'</div><div style="margin-top:3px"><span class="tchip '+TC[p.t]+'" style="font-size:9px">'+TL[p.t]+'</span></div></div>';}).join('');}
+function fsp(id,g){sPid=(sPid===id?null:id);bps(g,sPid,'fsp');}
+function rsp(id,g){rPid=id;bps(g,rPid,'rsp');}
+
+function openCM(id){eCid=id||null;sPid=null;if(id){var c=clients.find(function(x){return x.id===id;});if(!c)return;document.getElementById('fn').value=c.name;document.getElementById('fs').value=c.pstart||'';document.getElementById('fst').value=c.st;sPid=c.pid||null;document.getElementById('mCt').textContent='Izmeni klijenta';}else{document.getElementById('fn').value='';document.getElementById('fs').value=today();document.getElementById('fst').value='active';document.getElementById('mCt').textContent='Novi klijent';}bps('fpg',sPid,'fsp');om('mC');}
+function saveC(){var name=document.getElementById('fn').value.trim();if(!name){toast(t('toastEnterName'));return;}var data={name:name,pid:sPid,pstart:document.getElementById('fs').value,st:document.getElementById('fst').value};if(eCid){var i=clients.findIndex(function(c){return c.id===eCid;});clients[i]=Object.assign({},clients[i],data);}else clients.push(Object.assign({id:Date.now(),pused:0,rat:null,rn:'',arch:false},data));sv();cm('mC');rp();toast(eCid?t('toastClientEdited'):t('toastClientSaved'));}
+function openRM(cid){eRcid=cid;rStat='active';var c=cb(cid),p=c.pid?pgb(c.pid):null;document.getElementById('mRt').textContent='Produži — '+c.name.split(' ')[0];document.getElementById('mRi').innerHTML=p?'<div style="font-size:11px;color:var(--text3);margin-bottom:5px">Trenutni paket</div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="tchip '+TC[p.t]+'">'+TL[p.t]+'</span><strong style="font-size:15px">'+p.s+' treninga · €'+p.p+'</strong></div><div style="margin-top:5px;font-size:12px;color:var(--text3)">Ističe: '+fd(exp(c))+' · Iskorišćeno: '+(c.pused||0)+'/'+p.s+'</div>':'<div style="font-size:13px;color:var(--text3)">Nema aktivnog paketa.</div>';rPid=c.pid||null;bps('rpg',rPid,'rsp');var e=exp(c),nd=new Date(e||today());nd.setDate(nd.getDate()+1);document.getElementById('rstart').value=nd.toISOString().split('T')[0];document.getElementById('rnote').value='';selRS('active');om('mR');}
+function doRenew(){if(!rPid){toast(t('toastEnterPkg'));return;}var sd=document.getElementById('rstart').value;if(!sd){toast(t('toastEnterDate'));return;}var note=document.getElementById('rnote').value.trim(),i=clients.findIndex(function(c){return c.id===eRcid;});clients[i]=Object.assign({},clients[i],{pid:rPid,pstart:sd,pused:0,st:rStat,rat:today(),rn:note});sv();cm('mR');rp();toast(t('toastRenewed'));}
+
+function setGF(gid){filterGroup=gid;rp();}
+
+// ── GRUPE ──
+function pgGrupe(){
+  var cards=groups.length?groups.map(function(g){
+    var members=clients.filter(function(c){return !c.arch&&g.members&&g.members.indexOf(c.id)>-1;});
+    var memberNames=members.map(function(c){return'<div class="member-row"><span class="member-name">'+ini(c.name)+' '+c.name+'</span></div>';}).join('');
+    return'<div class="grp-card" style="border-left:4px solid '+g.color+'">'+
+      '<div class="grp-header">'+
+        '<div class="grp-name"><span style="width:12px;height:12px;border-radius:50%;background:'+g.color+';display:inline-block;flex-shrink:0;"></span>'+g.name+'</div>'+
+        '<div class="grp-actions">'+
+          '<span class="grp-chip" style="background:'+g.color+'22;color:'+g.color+';border-color:'+g.color+'44">'+members.length+' klijenata</span>'+
+          '<button class="btn btnsm" onclick="openGM('+g.id+')">'+t('edit')+'</button>'+
+          '<button class="btn btnsm btnr" onclick="delG('+g.id+')">×</button>'+
+        '</div>'+
+      '</div>'+
+      (members.length?'<div class="member-list">'+memberNames+'</div>':'<div style="font-size:12px;color:var(--text3);margin-top:4px">Nema klijenata u grupi.</div>')+
+    '</div>';
+  }).join(''):'<div class="empty">'+t('noGroups')+'</div>';
+  return'<div class="topbar"><div class="ptitle">'+t('groups')+'</div><button class="btn btnp" onclick="openGM()">'+t('newGroup')+'</button></div>'+
+    '<div style="font-size:13px;color:var(--text3);margin-bottom:14px;">Napravi grupe klijenata — npr. Jutarnja, Napredna, VIP. Filtriraj klijente po grupi na glavnoj strani.</div>'+
+    '<div class="grp-grid">'+cards+'</div>';
+}
+
+function openGM(id){
+  eGid=id||null;selGColor='#cc2200';
+  var existingMembers=[];
+  if(id){
+    var g=groups.find(function(x){return x.id===id;});
+    if(!g)return;
+    document.getElementById('gn').value=g.name;
+    selGColor=g.color;
+    existingMembers=g.members||[];
+    document.getElementById('mGt').textContent=t('editGroup');
+  } else {
+    document.getElementById('gn').value='';
+    document.getElementById('mGt').textContent=t('newGroup');
+  }
+  // Color picker
+  document.getElementById('lGName').textContent=t('groupName');
+  document.getElementById('lGColor').textContent=t('groupColor');
+  document.getElementById('lGMembers').textContent=t('groupMembers');
+  document.getElementById('colorRow').innerHTML=GROUP_COLORS.map(function(col){
+    return'<div class="color-dot'+(col===selGColor?' sel':'')+'" style="background:'+col+'" onclick="selGC(\''+col+'\')" title="'+col+'"></div>';
+  }).join('');
+  // Member picker
+  var ac=clients.filter(function(c){return !c.arch;});
+  document.getElementById('memberPicker').innerHTML='<div class="member-list">'+ac.map(function(c){
+    var on=existingMembers.indexOf(c.id)>-1;
+    return'<div class="member-row"><span class="member-name">'+ini(c.name)+' '+c.name+'</span>'+
+      '<div class="chk-small'+(on?' on':'')+'" id="gm_'+c.id+'" onclick="togGM('+c.id+')">'+
+        (on?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+
+      '</div>'+
+    '</div>';
+  }).join('')+'</div>';
+  om('mG');
+}
+
+function selGC(col){
+  selGColor=col;
+  document.querySelectorAll('.color-dot').forEach(function(el){
+    el.classList.toggle('sel',el.style.background===col||el.style.backgroundColor===col);
+  });
+}
+
+function togGM(cid){
+  var el=document.getElementById('gm_'+cid);
+  if(!el)return;
+  var on=el.classList.contains('on');
+  el.classList.toggle('on',!on);
+  el.innerHTML=!on?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':'';
+}
+
+function saveG(){
+  var name=document.getElementById('gn').value.trim();
+  if(!name){toast(t('toastEnterName'));return;}
+  var members=[];
+  clients.filter(function(c){return !c.arch;}).forEach(function(c){
+    var el=document.getElementById('gm_'+c.id);
+    if(el&&el.classList.contains('on'))members.push(c.id);
+  });
+  if(eGid){
+    var i=groups.findIndex(function(g){return g.id===eGid;});
+    groups[i]=Object.assign({},groups[i],{name:name,color:selGColor,members:members});
+  } else {
+    groups.push({id:Date.now(),name:name,color:selGColor,members:members});
+  }
+  sv();cm('mG');rp();toast(t('groupSaved'));
+}
+
+function delG(id){
+  if(!confirm(t('confirmDelete')))return;
+  groups=groups.filter(function(g){return g.id!==id;});
+  sv();rp();toast(t('groupDeleted'));
+}
+
+// ── RASPORED ──
+function getWeekStart(offset){
+  var d=new Date();
+  var day=d.getDay();
+  var diff=d.getDate()-(day===0?6:day-1);
+  var mon=new Date(d.setDate(diff));
+  mon.setDate(mon.getDate()+offset*7);
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+function dateStr(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function clientColor(cid){
+  var COLS=['#cc2200','#1a56db','#1a7a2e','#9333ea','#059669','#d97706','#0891b2','#be185d'];
+  return COLS[cid%COLS.length];
+}
+
+function pgRaspored(){
+  var ws=getWeekStart(weekOffset);
+  var days=t('days7');
+  var weekDates=[];
+  for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(d.getDate()+i);weekDates.push(d);}
+  var todayS=today();
+  var weekLabel=fd(dateStr(weekDates[0]))+' – '+fd(dateStr(weekDates[6]));
+
+  // Build header
+  var head='<div class="sched-head"><div class="sched-head-cell" style="font-size:10px;color:var(--text3)">⏰</div>'+
+    weekDates.map(function(d,i){
+      var ds=dateStr(d);
+      var isT=ds===todayS;
+      return'<div class="sched-head-cell'+(isT?' today-col':'')+'">'+days[i]+'<div style="font-size:13px;font-weight:'+(isT?'800':'600')+'">'+d.getDate()+'</div></div>';
+    }).join('')+'</div>';
+
+  // Build rows per hour
+  var rows=SLOT_HOURS.map(function(hour){
+    var cells=weekDates.map(function(d,di){
+      var ds=dateStr(d);
+      var isT=ds===todayS;
+      var daySlots=slots.filter(function(s){return s.date===ds&&s.time===hour;});
+      var content=daySlots.map(function(s){
+        var c=cb(s.cid);
+        var col=c?clientColor(c.id):'#888';
+        var name=c?c.name.split(' ')[0]:'?';
+        return'<div class="slot" style="background:'+col+'22;color:'+col+';border-left:3px solid '+col+'" onclick="openSlotEdit('+s.id+',event)">'+name+(s.note?'<div style="font-size:9px;opacity:0.8">'+s.note+'</div>':'')+'<div style="font-size:9px;opacity:0.7">'+s.dur+'min</div></div>';
+      }).join('');
+      return'<div class="sched-cell'+(isT?' today-col':'')+'" onclick="openSlotNew(\''+ds+'\',\''+hour+'\',event)">'+content+'</div>';
+    }).join('');
+    return'<div class="sched-row"><div class="sched-time">'+hour+'</div>'+cells+'</div>';
+  }).join('');
+
+  // Legend
+  var usedClients=[];
+  var usedIds=[];
+  slots.forEach(function(s){
+    var ws2=getWeekStart(weekOffset);
+    var we=new Date(ws2);we.setDate(we.getDate()+6);
+    var sd=new Date(s.date);
+    if(sd>=ws2&&sd<=we&&usedIds.indexOf(s.cid)===-1){usedIds.push(s.cid);usedClients.push(s.cid);}
+  });
+  var legend=usedClients.length?'<div class="sched-legend">'+usedClients.map(function(cid){var c=cb(cid);if(!c)return'';var col=clientColor(cid);return'<div class="legend-item"><div class="legend-dot" style="background:'+col+'"></div>'+c.name+'</div>';}).join('')+'</div>':'';
+
+  return'<div class="week-nav">'+
+    '<button class="btn btnsm" onclick="chgWeek(-1)">'+t('prevWeek')+'</button>'+
+    '<div style="text-align:center"><div class="week-label">'+t('schedule')+'</div><div style="font-size:12px;color:var(--text3)">'+weekLabel+'</div></div>'+
+    '<button class="btn btnsm" onclick="chgWeek(1)">'+t('nextWeek')+'</button>'+
+  '</div>'+
+  (weekOffset!==0?'<div style="text-align:center;margin-bottom:10px"><button class="btn btnsm" onclick="chgWeek(0,true)">'+t('thisWeek')+'</button></div>':'')+
+  '<div style="font-size:12px;color:var(--text3);margin-bottom:10px">Klikni na bilo koje polje da dodaš termin.</div>'+
+  '<div class="sched-wrap"><div class="sched-table">'+head+rows+'</div></div>'+legend;
+}
+
+function chgWeek(dir,reset){
+  if(reset)weekOffset=0;
+  else weekOffset+=dir;
+  rp();
+}
+
+function openSlotNew(date,hour,ev){
+  if(ev)ev.stopPropagation();
+  eSlotId=null;slotSelCid=null;
+  document.getElementById('mSt').textContent=t('addSlot');
+  document.getElementById('mSt').setAttribute('data-date',date);
+  document.getElementById('slotDeleteBtn').style.display='none';
+  document.getElementById('sNote').value='';
+  buildTimeSelect(hour);
+  buildClientPick(null);
+  om('mS');
+}
+
+function openSlotEdit(id,ev){
+  if(ev)ev.stopPropagation();
+  var s=slots.find(function(x){return x.id===id;});
+  if(!s)return;
+  eSlotId=id;slotSelCid=s.cid;
+  document.getElementById('mSt').textContent=t('editSlot');
+  document.getElementById('slotDeleteBtn').style.display='block';
+  document.getElementById('sNote').value=s.note||'';
+  document.getElementById('sDur').value=s.dur;
+  buildTimeSelect(s.time);
+  buildClientPick(s.cid);
+  om('mS');
+}
+
+function buildTimeSelect(selected){
+  var el=document.getElementById('sTime');
+  // Build 30-min increments from 06:00 to 22:00
+  var times=[];
+  for(var h=6;h<=21;h++){times.push(pad(h)+':00');times.push(pad(h)+':30');}
+  el.innerHTML=times.map(function(t2){return'<option value="'+t2+'"'+(t2===selected?' selected':'')+'>'+t2+'</option>';}).join('');
+}
+
+function buildClientPick(selId){
+  var ac=clients.filter(function(c){return !c.arch;});
+  document.getElementById('slotClientPick').innerHTML=ac.map(function(c){
+    var p=c.pid?pgb(c.pid):null;
+    var col=clientColor(c.id);
+    var on=c.id===selId;
+    return'<div class="cpick-row'+(on?' sel':'')+'" id="cp_'+c.id+'" onclick="selSlotClient('+c.id+')">'+
+      '<div class="cpick-av" style="background:'+col+'22;color:'+col+'">'+ini(c.name)+'</div>'+
+      '<div><div class="cpick-name">'+c.name+'</div><div class="cpick-pkg">'+(p?p.s+' treninga · €'+p.p:'Bez paketa')+'</div></div>'+
+    '</div>';
+  }).join('');
+}
+
+function selSlotClient(cid){
+  slotSelCid=cid;
+  document.querySelectorAll('.cpick-row').forEach(function(el){el.classList.remove('sel');});
+  var el=document.getElementById('cp_'+cid);
+  if(el)el.classList.add('sel');
+}
+
+function saveSlot(){
+  if(!slotSelCid){toast(t('noSlotClient'));return;}
+  var time=document.getElementById('sTime').value;
+  var dur=Number(document.getElementById('sDur').value);
+  var note=document.getElementById('sNote').value.trim();
+  // Figure out date from currently viewed slot or use today
+  var date=today();
+  // Get date from the slot being edited
+  if(eSlotId){
+    var existing=slots.find(function(s){return s.id===eSlotId;});
+    if(existing)date=existing.date;
+    var i=slots.findIndex(function(s){return s.id===eSlotId;});
+    slots[i]=Object.assign({},slots[i],{cid:slotSelCid,time:time,dur:dur,note:note});
+  } else {
+    // Use date stored in the modal (set via data attr trick)
+    var el=document.getElementById('mSt');
+    date=el.getAttribute('data-date')||today();
+    slots.push({id:Date.now(),cid:slotSelCid,date:date,time:time,dur:dur,note:note});
+  }
+  sv();cm('mS');rp();toast(t('slotSaved'));
+}
+
+function delSlot(){
+  if(!eSlotId)return;
+  if(!confirm(t('confirmSlotDelete')))return;
+  slots=slots.filter(function(s){return s.id!==eSlotId;});
+  sv();cm('mS');rp();toast(t('slotDeleted'));
+}
+
+// ── PAKETI ──
+function pgPaketi(){var cards=pkgs.length?pkgs.map(function(p){return'<div class="pkc"><button onclick="delP('+p.id+')" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:20px">×</button><div style="margin-bottom:6px"><span class="tchip '+TC[p.t]+'">'+TL[p.t]+'</span></div><div class="pkn">'+p.s+'</div><div class="pks">treninga / 30 dana</div><div class="pkp">€'+p.p+'</div>'+(p.n?'<div class="pknm">'+p.n+'</div>':'')+'<div style="margin-top:10px"><button class="btn btnsm" onclick="openPM('+p.id+')">Izmeni</button></div></div>';}).join(''):'<div class="empty">Nema paketa. Dodaj prvi!</div>';return'<div class="topbar"><div class="ptitle">Paketi</div><button class="btn btnp" onclick="openPM()">+ Novi paket</button></div><div class="pkgrid">'+cards+'</div><div style="font-size:12px;color:var(--text3)">Broj treninga unosiš slobodno. Svaki paket traje 30 dana.</div>';}
+function openPM(id){ePid=id||null;pkgType='p';if(id){var p=pgb(id);document.getElementById('ps').value=p.s;document.getElementById('pp').value=p.p;document.getElementById('pn').value=p.n||'';pkgType=p.t||'p';document.getElementById('mPt').textContent='Izmeni paket';}else{document.getElementById('ps').value='';document.getElementById('pp').value='';document.getElementById('pn').value='';document.getElementById('mPt').textContent='Novi paket';}setTimeout(function(){selT(pkgType);},30);om('mP');}
+function saveP(){var s=Number(document.getElementById('ps').value),pr=Number(document.getElementById('pp').value);if(!s||!pr){toast(t('toastEnterSessions'));return;}var n=document.getElementById('pn').value.trim();if(ePid){var i=pkgs.findIndex(function(p){return p.id===ePid;});pkgs[i]=Object.assign({},pkgs[i],{s:s,p:pr,n:n,t:pkgType});}else pkgs.push({id:Date.now(),s:s,p:pr,n:n,t:pkgType});sv();cm('mP');rp();toast(t('toastPkgSaved'));}
+function delP(id){if(clients.some(function(c){return c.pid===id;})){toast(t('toastPkgActive'));return;}if(!confirm(t('confirmPkg')))return;pkgs=pkgs.filter(function(p){return p.id!==id;});sv();rp();toast(t('toastDeleted'));}
+
+// ── FINANSIJE ──
+function getFinData(period){
+  var now=new Date(),months=[],revenue=[],labels=[];
+  var n=period==='3meseca'?3:period==='6meseci'?6:period==='godina'?12:1;
+  for(var i=n-1;i>=0;i--){
+    var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    var y=d.getFullYear(),m=d.getMonth()+1;
+    months.push({y:y,m:m});
+    labels.push(d.toLocaleString('sr-Latn',{month:'short'})+(n>6?' '+String(y).slice(2):''));
+  }
+  revenue=months.map(function(mo){
+    return sessions.filter(function(s){var a=s.date.split('-').map(Number);return a[0]===mo.y&&a[1]===mo.m;}).reduce(function(sum,s){var c=cb(s.cid);var p=c&&c.pid?pgb(c.pid):null;return sum+(p?Math.round(p.p/p.s):0);},0);
+  });
+  return{labels:labels,revenue:revenue};
+}
+
+function pgFin(){
+  var ac=clients.filter(function(c){return !c.arch;});
+  var monthRev=ac.filter(function(c){return c.st==='active'&&c.pid;}).reduce(function(s,c){var p=pgb(c.pid);return s+(p?p.p:0);},0);
+  var yearRev=ac.filter(function(c){return c.pid;}).reduce(function(s,c){var p=pgb(c.pid);return s+(p?p.p:0);},0)*12;
+  var fd2=getFinData(finPeriod);
+  var mx=Math.max.apply(null,fd2.revenue.concat([1]));
+  var bars=fd2.revenue.map(function(v,i){return'<div class="bcol"><div class="bv">€'+v+'</div><div class="br" style="height:'+( Math.round(v/mx*95)+4)+'px;background:var(--red);"></div><div class="bl">'+fd2.labels[i]+'</div></div>';}).join('');
+  var totalPeriod=fd2.revenue.reduce(function(a,b){return a+b;},0);
+  var avgMonth=fd2.revenue.length?Math.round(totalPeriod/fd2.revenue.length):0;
+
+  var topClients=ac.map(function(c){var p=c.pid?pgb(c.pid):null;return{name:c.name,rev:p?p.p:0};}).sort(function(a,b){return b.rev-a.rev;}).slice(0,5);
+  var mxC=Math.max.apply(null,topClients.map(function(x){return x.rev;}).concat([1]));
+  var cbars=topClients.map(function(x){var pct=Math.round(x.rev/mxC*100);return'<div class="cbrow"><div class="cbn">'+x.name.split(' ')[0]+' '+((x.name.split(' ')[1]||'')[0]||'')+'.</div><div class="cbt"><div class="cbf" style="width:'+pct+'%;background:var(--red)"></div></div><div class="cbc" style="color:var(--red);font-weight:600">€'+x.rev+'</div></div>';}).join('');
+
+  var pkgStats=pkgs.map(function(p){var cnt=ac.filter(function(c){return c.pid===p.id&&c.st==='active';}).length;return{name:(p.n||p.s+' treninga'),cnt:cnt,rev:cnt*p.p};}).filter(function(x){return x.cnt>0;});
+  var pkgRows=pkgStats.length?pkgStats.map(function(x){return'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:13px;font-weight:600;color:var(--text)">'+x.name+'</div><div style="font-size:11px;color:var(--text3)">'+x.cnt+' aktivnih klijenata</div></div><div style="font-size:15px;font-weight:700;color:var(--red)">€'+x.rev+'/mes.</div></div>';}).join(''):'<div class="empty">Nema podataka.</div>';
+
+  return'<div class="topbar"><div class="ptitle">Finansije</div></div>'+
+    '<div class="fin-big">'+
+      '<div class="fin-card accent"><div class="fin-lbl">Prihod ovog meseca</div><div class="fin-val">€'+monthRev+'</div><div class="fin-sub">'+ac.filter(function(c){return c.st==='active';}).length+' aktivnih klijenata</div></div>'+
+      '<div class="fin-card"><div class="fin-lbl">Prosek / mesec</div><div class="fin-val">€'+avgMonth+'</div><div class="fin-sub">za izabrani period</div></div>'+
+      '<div class="fin-card"><div class="fin-lbl">Ukupno u periodu</div><div class="fin-val">€'+totalPeriod+'</div><div class="fin-sub">'+fd2.labels.length+' meseci</div></div>'+
+      '<div class="fin-card"><div class="fin-lbl">Godišnja projekcija</div><div class="fin-val">€'+monthRev*12+'</div><div class="fin-sub">na osnovu ovog meseca</div></div>'+
+    '</div>'+
+    '<div class="fin-period">'+
+      ['mesec','3meseca','6meseci','godina'].map(function(p){var l={mesec:'1 mesec','3meseca':'3 meseca','6meseci':'6 meseci',godina:'Godina'}[p];return'<button class="'+(finPeriod===p?'on':'')+'" onclick="setFP(\''+p+'\')">'+l+'</button>';}).join('')+
+    '</div>'+
+    '<div class="secc"><div class="sectl">Prihod po mesecu</div><div class="bwrap">'+bars+'</div></div>'+
+    '<div class="secc"><div class="sectl">Prihod po klijentu / mes.</div>'+cbars+'</div>'+
+    '<div class="secc"><div class="sectl">Prihod po paketu</div>'+pkgRows+'</div>';
+}
+function setFP(p){finPeriod=p;rp();}
+
+// ── WHATSAPP ──
+function buildWaMsg(c){
+  var p=c.pid?pgb(c.pid):null;
+  var e=exp(c),d=e?du(e):0;
+  var tpl=waTpl();
+  return tpl
+    .replace(/{ime}/g,c.name.split(' ')[0])
+    .replace(/{dani}/g,String(d))
+    .replace(/{datum}/g,fd(e)||'—')
+    .replace(/{paket}/g,p?(p.n||p.s+' treninga'):'paket')
+    .replace(/{cena}/g,p?String(p.p):'—');
+}
+
+function pgWA(){
+  var ac=clients.filter(function(c){return !c.arch;});
+  var expiring=ac.filter(function(c){var e=exp(c);return e&&c.st!=='paused'&&du(e)>=0&&du(e)<=14;}).sort(function(a,b){return du(exp(a))-du(exp(b));});
+  var all=ac.filter(function(c){return c.pid;});
+  var shown=expiring.length?expiring:all;
+
+  var cards=shown.map(function(c){
+    var e=exp(c),d=e?du(e):null;
+    var urgency=d!==null&&d<=7?'border-color:var(--amber)':'';
+    var msg=buildWaMsg(c);
+    var waLink='https://wa.me/?text='+encodeURIComponent(msg);
+    return'<div class="wa-card" style="'+urgency+'">'+
+      '<div class="wa-name">'+c.name+(d!==null?'<span style="font-size:11px;font-weight:400;color:'+(d<=3?'var(--red)':'var(--amber)')+'"> — ističe '+(d===0?'DANAS':d===1?'sutra':'za '+d+' dana')+'</span>':'')+'</div>'+
+      '<div class="wa-info">'+(c.pid&&pgb(c.pid)?pgb(c.pid).s+' treninga · €'+pgb(c.pid).p:'')+(e?' · do '+fd(e):'')+'</div>'+
+      '<div class="wa-msg">'+msg+'</div>'+
+      '<div class="wa-actions">'+
+        '<a href="'+waLink+'" target="_blank" style="text-decoration:none"><button class="btn btnsm" style="background:#25D366;color:#fff;border-color:#25D366;font-weight:600">📲 Otvori WhatsApp</button></a>'+
+        '<button class="btn btnsm" onclick="copyMsg(this,\''+encodeURIComponent(msg)+'\')">Kopiraj</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  return'<div class="topbar"><div class="ptitle">WhatsApp</div><button class="btn btnsm" onclick="openWaTpl()">✏️ Uredi šablon</button></div>'+
+    '<div style="font-size:13px;color:var(--text3);margin-bottom:14px;">'+(expiring.length?t('waExpiring'):t('waAll'))+'</div>'+
+    (shown.length?cards:'<div class="empty">Nema klijenata sa aktivnim paketima.</div>');
+}
+function copyMsg(btn,enc){var msg=decodeURIComponent(enc);if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){btn.textContent=t('copied');setTimeout(function(){btn.textContent=t('copy');},2000);});}else{toast('Kopirano!');}}
+function openWaTpl(){document.getElementById('waTpl').value=waTpl();om('mW');}
+function saveWaTpl(){var v=document.getElementById('waTpl').value.trim();if(!v){toast(t('toastEnterTpl'));return;}localStorage.setItem('ptwatpl',v);cm('mW');rp();toast(t('toastTplSaved'));}
+
+// ── ARHIVA ──
+function pgArh(){var arc=clients.filter(function(c){return c.arch;});var cards=arc.length?arc.map(function(c){var p=c.pid?pgb(c.pid):null,cnt=sessions.filter(function(s){return s.cid===c.id;}).length;return'<div class="cc archived"><div class="ctop"><div class="av" style="opacity:0.6">'+ini(c.name)+'</div><div class="ci"><div class="cn" style="color:var(--text2)">'+c.name+'</div><div class="cm">'+(p?'<span class="tchip '+TC[p.t]+'">'+TL[p.t]+'</span>':'')+' '+(p?'<span>'+p.s+' treninga</span>':'')+'</div><div style="font-size:11px;color:var(--text3);margin-top:3px">'+cnt+' treninga ukupno</div></div><div class="cr"><span class="bdg bar2">Arhiviran</span></div></div><div class="cact"><button class="btn btng btnsm" onclick="actC('+c.id+')">'+t('activate')+'</button><button class="btn btnsm btnr" onclick="delC('+c.id+')">'+t('deleteForever')+'</button></div></div>';}).join(''):'<div class="empty">Nema arhiviranih klijenata.</div>';return'<div class="topbar"><div class="ptitle">Arhiva</div></div><div style="font-size:13px;color:var(--text3);margin-bottom:14px">Arhivirani klijenti su sačuvani — možeš ih aktivirati u bilo kom trenutku.</div><div class="clist">'+cards+'</div>';}
+
+// ── SETTINGS ──
+function pgSet(){
+  var langs=[{code:'sr',flag:'🇷🇸',name:'Srpski'},{code:'en',flag:'🇬🇧',name:'English'},{code:'ru',flag:'🇷🇺',name:'Русский'}];
+  var langBtns=langs.map(function(l){return'<button onclick="setLang(\''+l.code+'\')" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--rs);border:2px solid '+(lang===l.code?'var(--red)':'var(--border2)')+';background:'+(lang===l.code?'var(--redbg)':'var(--bg2)')+';cursor:pointer;font-family:inherit;font-size:13px;font-weight:'+(lang===l.code?'700':'400')+';color:var(--text)"><span style="font-size:18px">'+l.flag+'</span>'+l.name+'</button>';}).join('');
+  return'<div class="topbar"><div class="ptitle">'+t('settingsTitle')+'</div></div>'+
+    '<div class="setrow"><div><div class="setlbl">'+t('languageLbl')+'</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+langBtns+'</div></div>'+
+    '<div class="setrow"><div><div class="setlbl">'+t('darkMode')+'</div><div class="setsub">'+t('darkModeSub')+'</div></div><div class="tog'+(isDark?' on':'')+'" onclick="togDark()"><div class="togk"></div></div></div>'+
+    '<div class="setrow"><div><div class="setlbl">'+t('trainerNameLbl')+'</div><div class="setsub">'+t('trainerNameSub')+'</div></div><input id="trainerName" value="'+(localStorage.getItem('trainerName')||'StamenicFitt')+'" onchange="saveTrainerName(this.value)" style="padding:6px 10px;font-size:14px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg2);color:var(--text);font-family:inherit;width:140px"/></div>'+
+    '<div class="setrow"><div><div class="setlbl">'+t('waTplLbl')+'</div><div class="setsub">'+t('waTplSub')+'</div></div><button class="btn btnsm" onclick="st(\'whatsapp\')">'+t('edit')+'</button></div>'+
+    '<div class="setrow"><div><div class="setlbl">'+t('notifLbl')+'</div><div class="setsub">'+t('notifSub')+'</div></div><button class="btn btnsm" onclick="reqN()">'+t('enableBtn')+'</button></div>'+
+    '<div class="setrow"><div><div class="setlbl">'+t('clearDataLbl')+'</div><div class="setsub">'+t('clearDataSub')+'</div></div><button class="btn btnsm btnr" onclick="clrAll()">'+t('deleteBtn')+'</button></div>'+
+    '<div class="setrow"><div><div class="setlbl">'+t('version')+'</div><div class="setsub">'+t('versionSub')+'</div></div></div>';
+}
+function saveTrainerName(v){localStorage.setItem('trainerName',v);toast(t('toastSaved'));}
+function togDark(){isDark=!isDark;sv();theme();rp();}
+function reqN(){if(!('Notification' in window)){toast(t('toastNotifNo'));return;}Notification.requestPermission().then(function(p){toast(p==='granted'?t('toastNotifOn'):t('toastNotifOff'));});}
+function clrAll(){if(!confirm(t('confirmAll')))return;clients=[];sessions=[];pkgs=[];sv();rp();toast(t('toastAllCleared'));}
+
+['mC','mR','mP','mL','mW','mG','mS'].forEach(function(id){document.getElementById(id).addEventListener('click',function(e){if(e.target===e.currentTarget)cm(id);});});
+
+theme();nav();rp();
+</script>
+</body>
+</html>
