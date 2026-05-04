@@ -18,12 +18,17 @@ function pgRaspored(){
   var head='<div class="shead"><div class="shc" style="font-size:9px">⏰</div>'+
     wdays.map(function(d,i){var dstr=ds(d);var isTd=dstr===td;return '<div class="shc'+(isTd?' td':'')+'">'+days[i]+'<div style="font-size:13px;font-weight:'+(isTd?'800':'600')+'">'+d.getDate()+'</div></div>';}).join('')+'</div>';
 
+  // Slot pripada redu po satu (npr. 6:30 → red 06:00). Sortiramo po
+  // stvarnom vremenu da rani slotovi budu na vrhu ćelije.
+  var slotHourOf=function(t){return (t||'00:00').split(':')[0]+':00';};
   var rows=HOURS.map(function(hr){
     var cells=wdays.map(function(d,di){
       var dstr=ds(d),isTd=dstr===td;
-      var dslots=slots.filter(function(s){return s.date===dstr&&s.time===hr;});
+      var dslots=slots
+        .filter(function(s){return s.date===dstr&&slotHourOf(s.time)===hr;})
+        .sort(function(a,b){return (a.time||'').localeCompare(b.time||'');});
       var dots=dslots.map(function(s){var c=cob(s.cid);var col=c?cCol(c.id):'#888';var nm=c?c.name.split(' ')[0]:'?';
-        return '<div class="slot" data-eslot="'+s.id+'" style="background:'+col+'22;color:'+col+';border-left:3px solid '+col+'">'+nm+(s.note?'<div style="font-size:9px;opacity:.8">'+s.note+'</div>':'')+'<div style="font-size:9px;opacity:.7">'+s.dur+'m</div></div>';
+        return '<div class="slot" data-eslot="'+s.id+'" style="background:'+col+'22;color:'+col+';border-left:3px solid '+col+'"><div style="font-weight:700">'+s.time+' '+nm+'</div>'+(s.note?'<div style="font-size:9px;opacity:.8">'+s.note+'</div>':'')+'<div style="font-size:9px;opacity:.7">'+s.dur+'m</div></div>';
       }).join('');
       return '<div class="scell'+(isTd?' td':'')+'" data-nslot="1" data-date="'+dstr+'" data-hour="'+hr+'">'+dots+'</div>';
     }).join('');
@@ -45,11 +50,6 @@ function pgRaspored(){
 }
 function chgWk(d,reset){weekOff=reset?0:weekOff+d;renderPage();}
 
-function buildTimeOpts(sel){
-  var times=[],h,m;
-  for(h=6;h<=21;h++){for(m=0;m<60;m+=30)times.push(pad(h)+':'+pad(m));}
-  return times.map(function(t2){return '<option value="'+t2+'"'+(t2===sel?' selected':'')+'>'+t2+'</option>';}).join('');
-}
 function buildCPick(selCid){
   var ac=clients.filter(function(c){return !c.arch;});
   return ac.map(function(c){var col=cCol(c.id);var p=c.pid?pgb(c.pid):null;
@@ -67,7 +67,7 @@ function openSlotNew(date,hour){
   document.getElementById('mSlott').setAttribute('data-date',date);
   document.getElementById('sltdelbtn').style.display='none';
   document.getElementById('sltnote').value='';
-  document.getElementById('slttime').innerHTML=buildTimeOpts(hour||'09:00');
+  document.getElementById('slttime').value=hour||'09:00';
   document.getElementById('sltdur').value='60';
   document.getElementById('sltcp').innerHTML=buildCPick(null);
   om('mSlot');
@@ -79,7 +79,7 @@ function openSlotEdit(id){
   document.getElementById('mSlott').setAttribute('data-date',s.date);
   document.getElementById('sltdelbtn').style.display='block';
   document.getElementById('sltnote').value=s.note||'';
-  document.getElementById('slttime').innerHTML=buildTimeOpts(s.time);
+  document.getElementById('slttime').value=s.time||'09:00';
   document.getElementById('sltdur').value=s.dur;
   document.getElementById('sltcp').innerHTML=buildCPick(s.cid);
   om('mSlot');

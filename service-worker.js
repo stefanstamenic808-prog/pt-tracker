@@ -1,6 +1,6 @@
 // service-worker.js — offline cache za StamenicFitt
 // Verzioniraj cache name pri svakom deploy-u da se stari fajlovi obrišu
-const CACHE_NAME = 'pt-tracker-v3';
+const CACHE_NAME = 'pt-tracker-v4';
 const ASSETS = [
   './',
   './index.html',
