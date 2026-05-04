@@ -1,0 +1,18 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Screenshots dropped into repo by accident
+Screenshot*.png
+Screenshot*.jpg
+
+# Old monolithic HTML backups
+pt-tracker-v*.html
+
+# Local Claude config (ne deli sa repoom)
+.claude/
+
+# Lokalni env / secret fajlovi
+.env
+.env.local
+*.secret
